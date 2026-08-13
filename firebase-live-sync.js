@@ -18,9 +18,9 @@
   // same trust model the local relay's room codes already use), not in
   // hiding these values.
   const FIREBASE_CONFIG = {
-    apiKey: 'REPLACE_ME',
-    authDomain: 'REPLACE_ME.firebaseapp.com',
-    projectId: 'REPLACE_ME',
+    apiKey: 'AIzaSyDO7jje5ZbN4qcFQHf36mkf1AnbEXKJrBM',
+    authDomain: 'smo-randomizer-tracker.firebaseapp.com',
+    projectId: 'smo-randomizer-tracker',
   };
 
   // The mod writes raw stage names (exitId/from/to/debugArrivalDoorId), not
