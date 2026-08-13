@@ -6986,14 +6986,6 @@ init();
     const isKingdomArrival = data.tgt.startsWith('kingdom:');
     const alreadyConnectedReverse = !isKingdomArrival
       && edgeList.some(e => e.src === data.tgt && e.tgt === data.src);
-    // Temporary diagnostic - remove once the kingdom-home-arrival mislink is
-    // actually confirmed fixed. nodes[data.tgt]/nodes[data.src] missing would
-    // make connect() silently no-op via canConnect()'s first check, which
-    // this makes visible instead of indistinguishable from the dedup path.
-    console.log('[tracker] handleLiveEvent', {
-      src: data.src, tgt: data.tgt, isKingdomArrival, alreadyConnectedReverse,
-      srcNodeExists: !!nodes[data.src], tgtNodeExists: !!nodes[data.tgt],
-    });
     if (alreadyConnectedReverse) return;
     connect(data.src, data.sPart || PART_OUT, data.tgt, data.tPart || PART_IN);
   }
