@@ -1,0 +1,1992 @@
+/* ── Reset & Root ───────────────────────────────────────────────── */
+:root {
+  --bg:          #181818;
+  --bg-card:     #242424;
+  --bg-card2:    #2e2e2e;
+  --bg-hover:    #383838;
+  --text:        #ffffff;
+  --text-dim:    #aaaaaa;
+  --accent:      #5865f2;
+  --accent-h:    #4752c4;
+  --green:       #4ade80;
+  --red:         #f87171;
+  --border:      #3a3a3a;
+  --radius:      10px;
+  --radius-sm:   6px;
+  --btn-bg:      #333333;
+  --btn-hover:   #444444;
+  --font:        'Arial Rounded MT Bold', 'Arial', sans-serif;
+  --panel-edge-gap: 24px; /* outer margin used once a side panel is showing */
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 15px; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  min-height: 100vh;
+  padding: 12px;
+  -webkit-tap-highlight-color: transparent;
+
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+/* ── App wrapper ─────────────────────────────────────────────────── */
+/* #layout-row holds #app and, optionally, #side-panel. With no panel
+   active, #app centers itself exactly as before. With a panel active,
+   body.panel-edges widens the outer gap to --panel-edge-gap on the sides
+   that border the panel layout, and #layout-row arranges #app/#side-panel
+   according to the Location setting (location-horizontal / location-vertical),
+   added by applySidePanel() in app.js. Both directions are plain flex
+   percentages/flex-basis (no fixed pixel panel width), so the panel grows
+   and shrinks fluidly as the window is resized. */
+#layout-row {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  justify-content: center;
+  align-items: flex-start;
+  flex: 1;
+  width: 100%;
+}
+
+/* Widens the left/right body padding to a bigger, even gap while any panel
+   is visible, so the tracker+panel combo (or the full-width vertical panel)
+   sits with a consistent ~24px margin from the true viewport edge instead
+   of the tighter default 12px used everywhere else. */
+body.panel-edges {
+  padding-left: var(--panel-edge-gap);
+  padding-right: var(--panel-edge-gap);
+}
+
+#app {
+  max-width: 580px;/* max-width: 680px; */
+  margin: 0 auto;
+  flex: 1;
+  min-width: 0;
+}
+
+/* ── Horizontal: tracker pinned near the left edge at its normal size,
+   panel fills the rest of the row out to the right edge. The tracker only
+   gives up width (flex-shrink: 0.3, slower than the panel) once the panel
+   has already been squeezed down to its own min-width. ────────────────── */
+#layout-row.location-horizontal.panel-open {
+  flex-direction: row;
+  /* Pin the tracker+panel to the left so any residual overflow spills to the
+     right (reachable/scrollable) instead of being centered and clipped off the
+     left edge, which was hiding the tracker title in the ~541–870px range. */
+  justify-content: flex-start;
+}
+#layout-row.location-horizontal.panel-open #app {
+  margin: 0;
+  /* Shrink freely down from 580px as the row narrows. The panel is frozen at
+     its 300px min-width in this range, so the tracker absorbs all the width
+     loss and scales down smoothly instead of overflowing. */
+  flex: 0 1 580px;
+  min-width: 0;
+}
+#layout-row.location-horizontal.panel-open #side-panel {
+  flex: 1 1 300px;
+  min-width: 300px;
+}
+
+/* ── Vertical: tracker stays centered at its normal size, panel drops
+   below and stretches the full available width (edge gap to edge gap). ── */
+#layout-row.location-vertical.panel-open {
+  flex-direction: column;
+  align-items: center;
+}
+#layout-row.location-vertical.panel-open #app {
+  margin: 0 auto;
+  flex: 0 0 auto;
+  width: 100%;
+}
+#layout-row.location-vertical.panel-open #side-panel {
+  width: 100%;
+  flex: 0 0 auto;
+  position: static;
+  top: auto;
+}
+
+/* ── Side Panel (Notes / Map embed) ─────────────────────────────── */
+#side-panel {
+  align-self: flex-start;
+  position: sticky;
+  top: 12px;
+  max-height: calc(100vh - 24px);
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+#side-panel.hidden { display: none; }
+
+.side-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.side-panel-header span { font-size: 1rem; font-weight: bold; }
+
+#side-panel-frame {
+  border: none;
+  width: 100%;
+  flex: 1;
+  min-height: 824px;
+  background: var(--bg);
+}
+
+/* Horizontal doesn't fit beside the tracker on narrow screens, so it falls
+   back to the default single-column tracker layout below the mobile
+   breakpoint - applySidePanel() in app.js already stops applying
+   .panel-open for Horizontal at this width, this is a CSS-only backstop.
+   Vertical is untouched here: it stays available on mobile since the panel
+   is already stacked below rather than beside the tracker. */
+@media (max-width: 624px) {
+  #layout-row.location-horizontal.panel-open {
+    flex-direction: column;
+  }
+  #layout-row.location-horizontal.panel-open #side-panel {
+    display: none;
+  }
+  #layout-row.location-horizontal.panel-open #app {
+    margin: 0 auto;
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+h1 {
+  text-align: center;
+  font-size: 1.35rem;
+  letter-spacing: 0.03em;
+  margin-bottom: 14px;
+  color: var(--text);
+}
+
+.header {
+    justify-content: space-between; 
+    align-items: center;
+    position: relative;
+    text-align: center;
+    padding: 1%;
+}
+
+#author-credit {
+  /* position: absolute;
+  bottom: 10px;
+  left: 14px; */
+  width: 100%;
+  max-width: 330px;
+  margin: 0 auto 0 0;
+  text-align: left;
+  overflow-wrap: break-word;
+  background: rgba(36,36,36,0.90);
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  user-select: none;
+  pointer-events: none;
+}
+
+/* ── Moon Rows ───────────────────────────────────────────────────── */
+#moon-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.moon-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 6px 8px;
+  border-left: 3px solid transparent;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.moon-row.row-complete {
+  background: rgba(74, 222, 128, 0.12);
+  border-left-color: var(--green);
+}
+
+/* Drag-to-reorder: a subtle gray outline hints the row can be picked up from
+   its empty space / edges, and the row lifts slightly while being dragged. */
+.moon-row.drag-ready {
+  box-shadow: inset 0 0 0 1px rgba(150, 150, 150, 0.55);
+  cursor: grab;
+}
+.moon-row.dragging {
+  cursor: grabbing;
+  opacity: 0.85;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+  border-left-color: rgba(150, 150, 150, 0.8);
+}
+
+.moon-row-left {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.moon-row-counter {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.moon-row-entry {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+/* On small screens, entry row drops to its own line */
+@media (max-width: 520px) { /*480 before */
+  .moon-row-entry {
+    flex-basis: 100%;
+    justify-content: flex-end;
+  }
+}
+
+.moon-row-entry .multi-moon-btn {
+    margin-right: auto; /* push multi to the left on mobile second row */
+  }
+
+/* Icon toggle buttons (lock / peace) */
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+.icon-btn:hover { background: var(--bg-hover); }
+.icon-btn img { width: 18px; height: 18px; object-fit: contain; display: block; }
+/* .icon-btn img { width: 20px; height: 20px; object-fit: contain; display: block; } */
+
+/* Kingdom image */
+.kingdom-icon {
+  height: 36px;
+  width: 36px;
+  object-fit: contain;
+  flex-shrink: 0;
+  transition: filter 0.2s;
+}
+.kingdom-icon.icon-white {
+  filter: brightness(0) invert(1);
+}
+
+/* Count display */
+.count-label {
+  font-size: 1.5rem;
+  font-weight: bold;
+  min-width: 60px;
+  text-align: center;
+  flex: 0 0 auto;
+  transition: color 0.2s;
+}
+.count-label.count-complete { color: var(--green); }
+
+/* Equal flexible spacers between counter items keeps min/max stacks
+   sitting at the exact midpoint of the gap on either side of them. */
+.counter-spacer {
+  flex: 1 1 auto;
+}
+
+/* Min/Max kingdom range reference label on top, number underneath */
+.range-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.15;
+  flex-shrink: 0;
+  min-width: 28px;
+}
+.range-stack .range-label {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-dim);
+}
+.range-stack .range-value {
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: var(--text);
+}
+.range-stack.hidden { display: none; }
+
+/* + / − buttons */
+.count-btn {
+  background: var(--btn-bg);
+  border: none;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 1.1rem;
+  font-weight: bold;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+.count-btn:hover  { background: var(--btn-hover); }
+.count-btn:active { background: var(--accent); }
+
+/* Multi Moon button */
+.multi-moon-btn {
+  background: var(--btn-bg);
+  /* border: 1.5px solid var(--btn-bg); */
+  border: none; 
+  cursor: pointer;
+  padding: 2px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.multi-moon-btn:hover { background: var(--bg-hover); }
+.multi-moon-btn img {
+  height: 30px;
+  width: 30px;
+  object-fit: contain;
+  display: block;
+  transition: filter 0.2s;
+}
+.multi-moon-btn.multi-off img { filter: contrast(0); }
+.multi-moon-btn.hidden        { display: none !important; }
+
+/* Max entry field */
+.max-entry {
+  background: var(--bg-card2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 1rem;
+  width: 48px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  text-align: center;
+  padding: 0 4px;
+}
+.max-entry::-webkit-inner-spin-button,
+.max-entry::-webkit-outer-spin-button { -webkit-appearance: none; }
+.max-entry:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* Save button (per row) */
+.save-btn {
+  background: var(--accent);
+  border: none;
+  color: #fff;
+  font-family: var(--font);
+  font-size: 1rem;
+  height: 32px;
+  padding: 0 9px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 0.15s;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.save-btn:hover  { background: var(--accent-h); }
+.save-btn.hidden { display: none; }
+
+/* ── Sync Section ──────────────────────────────────────────────────── */
+#sync-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin-bottom: 12px;
+}
+
+#sync-room-row,
+#sync-url-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+#sync-room-row input,
+#sync-url-row input {
+  background: var(--bg-card2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 0.95rem;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  padding: 0 10px;
+}
+
+#sync-room-row input {
+  flex: 1;
+  min-width: 0;
+  text-transform: uppercase;
+}
+
+#sync-url-row input {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.8rem;
+}
+
+#sync-room-row button,
+#sync-url-row button {
+  width: auto;
+  flex-shrink: 0;
+  padding: 0 10px;
+}
+
+#sync-status {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  text-align: center;
+}
+
+#sync-size-row {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  text-align: center;
+}
+
+/* ── Controls Section ──────────────────────────────────────────────── */
+#controls {
+  display: grid;
+  grid-template-columns: auto 1fr 1fr auto;
+  grid-template-areas: "captures buttons notes abilities";
+  align-items: stretch;
+  gap: 12px;
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+}
+
+#capture-section  { grid-area: captures; }
+#button-section   { grid-area: buttons;  }
+#notes-section    { grid-area: notes;    }
+#ability-section  { grid-area: abilities; }
+
+/* When captures are hidden, keep the column space so nothing shifts */
+#capture-section.hidden {
+  display: block !important;
+  visibility: hidden;
+}
+
+/* When ability icons are hidden (Ability Lock off), keep column space so
+   nothing shifts. Bowser is exempt: it's a capture that merely sits on the
+   ability side, so it stays visible and clickable while Jump/Cap/Wall only
+   reserve their space. */
+#ability-section.abilities-hidden .icon-toggle-btn.ability-icon:not([data-key="bowser"]) {
+  visibility: hidden;
+}
+
+@media (max-width: 540px) {
+  #controls {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      "buttons  notes"
+      "captures abilities";
+  }
+  /* On mobile, let captures fully disappear */
+  #capture-section.hidden {
+    display: none !important;
+    visibility: visible;
+  }
+}
+
+/* Mid-width squeeze: while the horizontal panel is open the tracker column is
+   narrowed, but the 4-column controls grid has a large min-content width and
+   won't shrink, forcing the whole row to overflow (and clip the title on the
+   left). Collapse controls here so #app can actually get smaller: two columns
+   from ~660–870px, a single column below that where space is tightest. */
+@media (min-width: 541px) and (max-width: 870px) {
+  #layout-row.location-horizontal.panel-open #controls {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      "buttons  notes"
+      "captures abilities";
+  }
+  #layout-row.location-horizontal.panel-open #capture-section.hidden {
+    display: none !important;
+    visibility: visible;
+  }
+}
+@media (min-width: 541px) and (max-width: 660px) {
+  #layout-row.location-horizontal.panel-open #controls {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+      "buttons"
+      "notes"
+      "captures"
+      "abilities";
+  }
+}
+
+/* ── Capture / Ability icon grids ───────────────────────────────── */
+#capture-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+}
+
+/* Ability icons: a centered column. Row 1 (.ability-top) holds Jump/Cap
+   (either can be individually hidden); Wall sits centered below. A fixed
+   min-width keeps the same footprint so a lone Wall stays centered instead
+   of collapsing the column and shifting the rest of #controls. */
+#ability-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  min-width: 101px; /* two 48px icons + 5px gap */
+}
+.ability-top {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+}
+.ability-top.row-gone { display: none; }
+
+/* Bottom row holds Bowser + Wall. Default (Jump/Cap not both shown): stacked
+   and centered, Wall on top with Bowser on its own row directly under it
+   (column-reverse because the DOM order is bowser, wall). When both Jump and
+   Cap are shown, #ability-row gets .abilities-2x2 and this becomes a horizontal
+   row - Bowser to the left of Wall - so the four icons read as a clean 2x2. */
+.ability-bottom {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: 5px;
+}
+#ability-row.abilities-2x2 .ability-bottom {
+  flex-direction: row;
+  justify-content: center;
+}
+
+/* Exactly one of Jump / Cap shown (3 icons total). Lay the row out as a real
+   2-column grid so the three icons read as: [Jump|Cap][Wall] on top, with
+   Bowser on its own row underneath, left-aligned under the first column (NOT
+   centered). display:contents lets the .ability-top / .ability-bottom wrappers
+   melt away so their buttons become direct grid items; `order` then places
+   Wall on the top row (next to the visible Jump/Cap) and drops Bowser last so
+   it lands in the bottom-left cell. */
+#ability-row.abilities-3 {
+  display: grid;
+  grid-template-columns: 48px 48px;
+  gap: 5px;
+  justify-content: center;
+  align-items: start;
+}
+#ability-row.abilities-3 .ability-top,
+#ability-row.abilities-3 .ability-bottom {
+  display: contents;
+}
+#ability-row.abilities-3 .ability-icon[data-key="bowser"] { order: 2; }
+
+/* Individually hidden ability icon (Jump / Cap Bounce show toggles off) */
+.icon-toggle-btn.ability-icon.icon-off { display: none; }
+
+/* Lock / Peace / Moon Rock sign columns hidden from the whole tracker via
+   settings. Moon Rock defaults to off, so hide-rock is present on first load. */
+#moon-rows.hide-lock .lock-btn   { display: none; }
+#moon-rows.hide-peace .peace-btn { display: none; }
+#moon-rows.hide-rock .rock-btn   { display: none; }
+
+.icon-toggle-btn {
+  background: var(--btn-bg);
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, opacity 0.15s;
+}
+.icon-toggle-btn:hover { background: var(--bg-hover); }
+.icon-toggle-btn img   { height: 40px; width: 40px; object-fit: contain; display: block; }
+.icon-toggle-btn.active { background: #2a3a2a; }
+.icon-toggle-btn.hidden { display: none; }
+
+#capture-section.hidden { display: none; }
+
+/* ── Button Section ──────────────────────────────────────────────── */
+#button-section {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 7px;
+}
+
+/* OBS button row: Open OBS fills left, ⓘ is square on right */
+#obs-btn-row {
+  display: flex;
+  gap: 6px;
+  width: 100%;
+}
+#obs-btn-row #btn-obs {
+  flex: 1;
+  max-width: none;
+  min-width: 0;
+}
+
+.ctrl-btn {
+  background: var(--btn-bg);
+  border: none;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 0.9rem;
+  height: 38px;
+  padding: 0 16px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.15s;
+}
+.ctrl-btn:hover { background: var(--btn-hover); }
+
+.danger-btn { color: var(--red); border: 1px solid var(--red); }
+.danger-btn:hover { background: #3a2020; }
+
+/* ⓘ info button square, same height as OBS button */
+.info-btn {
+  width: 38px;
+  min-width: 38px;
+  max-width: 38px;
+  height: 38px;
+  padding: 0;
+  font-size: 1.15rem;
+  flex-shrink: 0;
+}
+
+.gear-btn {
+  font-size: 1.2rem;
+  padding: 0;
+  width: 44px;
+  max-width: 44px;
+  height: 44px;
+  /* border-radius: 50%; */
+}
+
+/* Notes section own column beside OBS */
+#notes-section {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+/* Notes button fills its column, matching OBS column height */
+.notes-btn {
+  background: var(--btn-bg);
+  border: none;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 0.95rem;
+  width: 100%;
+  height: 38px;
+  /* min-height: 80px; */
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.notes-btn:hover { background: var(--bg-hover); }
+
+.map-btn {
+  background: var(--btn-bg);
+  border: none;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 0.95rem;
+  width: 100%;
+  height: 38px;
+  /* min-height: 80px; */
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.map-btn:hover { background: var(--bg-hover); }
+
+.apc-btn {
+  background: var(--btn-bg);
+  border: none;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 0.95rem;
+  width: 100%;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.apc-btn:hover { background: var(--bg-hover); }
+
+/* ── Modal Backdrop ──────────────────────────────────────────────── */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+.modal-backdrop.hidden { display: none; }
+
+.modal-box {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  width: 100%;
+  max-width: 440px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.modal-header h2 { font-size: 1.1rem; }
+
+.modal-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.modal-icon-btn {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 1.05rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s, background 0.15s;
+}
+.modal-icon-btn:hover { color: var(--text); background: var(--bg-hover); }
+
+.modal-icon-btn-red {
+  background: none;
+  border: none;
+  color: var(--red);
+  font-size: 1.05rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s, background 0.15s;
+}
+.modal-icon-btn-red:hover { background: #3a2020; }
+
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s, background 0.15s;
+}
+.modal-close:hover { color: var(--text); background: var(--bg-hover); }
+
+.modal-body {
+  overflow-y: auto;
+  padding: 12px 18px 18px;
+  flex: 1;
+}
+
+/* ── OBS Info Modal ──────────────────────────────────────────────── */
+.obs-info-modal-box { max-width: 500px; }
+
+.obs-info-body {
+  font-size: 0.88rem;
+  line-height: 1.65;
+  padding-top: 10px;
+}
+
+.obs-info-body .info-title {
+  font-size: 0.95rem;
+  margin: 14px 0 5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.obs-info-body .info-title:first-child { margin-top: 0; }
+
+.info-tag {
+  font-size: 0.72rem;
+  background: var(--accent);
+  color: #fff;
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.obs-info-body ol {
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.obs-info-body p:last-child { margin-top: 8px; }
+
+.obs-info-body code {
+  background: var(--bg-card2);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-family: monospace;
+  font-size: 0.85em;
+}
+
+/* ── Settings Modal ──────────────────────────────────────────────── */
+.settings-body { display: flex; flex-direction: column; gap: 8px; padding-top: 14px; }
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 5px 0;
+  font-size: 0.95rem;
+}
+.settings-row span { flex: 1; }
+
+/* CSS Toggle Switch */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 26px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+.toggle-track {
+  position: absolute;
+  inset: 0;
+  background: #444;
+  border-radius: 13px;
+  transition: background 0.2s;
+}
+.toggle-track::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  top: 3px;
+  left: 3px;
+  transition: transform 0.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
+.toggle-switch input:checked + .toggle-track             { background: var(--green); }
+.toggle-switch input:checked + .toggle-track::after      { transform: translateX(22px); }
+
+/* Text + Save pairs */
+.input-save-pair {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-shrink: 0;
+}
+.input-save-pair input {
+  background: var(--bg-card2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 0.9rem;
+  height: 32px;
+  width: 100px;
+  border-radius: var(--radius-sm);
+  text-align: center;
+  padding: 0 6px;
+}
+.input-save-pair input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.save-inline-btn {
+  background: var(--accent);
+  border: none;
+  color: #fff;
+  font-family: var(--font);
+  font-size: 0.85rem;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.save-inline-btn:hover { background: var(--accent-h); }
+
+/* Rebind button (mouse/key capture) */
+.rebind-btn {
+  background: var(--bg-card2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 0.85rem;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+  min-width: 90px;
+}
+.rebind-btn:hover { background: var(--bg-hover); }
+.rebind-btn.listening {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #fff;
+  cursor: default;
+}
+
+/* Revert Default Settings button */
+.revert-btn {
+  color: var(--red);
+  max-width: none;
+  width: 100%;
+}
+.revert-btn:hover { background: #3a2020; }
+
+/* ── Tabbed Settings layout ───────────────────────────────────────── */
+/* The modal-box is a vertical stack: header / tab-bar / scrolling body /
+   footer. Only the body scrolls; the tab bar and footer stay pinned. */
+.settings-modal-box { max-height: 88vh; }
+
+.settings-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 8px 12px 0;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+.settings-tabs::-webkit-scrollbar { height: 4px; }
+.settings-tabs::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.settings-tab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-dim);
+  font-family: var(--font);
+  font-size: 0.9rem;
+  padding: 8px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
+}
+.settings-tab:hover { color: var(--text); background: var(--bg-hover); }
+.settings-tab.active {
+  color: var(--text);
+  border-bottom-color: var(--accent);
+}
+
+/* Body remains the single scroll region (inherits .modal-body overflow-y). */
+.settings-body { display: block; }
+
+.settings-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.settings-panel:not(.active) { display: none; }
+
+/* Footer pinned below the scroll area */
+.settings-footer {
+  flex-shrink: 0;
+  padding: 12px 18px;
+  border-top: 1px solid var(--border);
+}
+
+/* ── Settings sub-sections (Ability Lock, Moon Updater, …) ────────── */
+.settings-subsection {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: rgba(0, 0, 0, 0.12);
+}
+.subsection-title {
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding: 2px 0 4px;
+}
+/* Indented child rows within a sub-section (or under a parent toggle) */
+.settings-subrow { padding-left: 12px; }
+.settings-subrow span { color: var(--text-dim); }
+
+/* Dimmed + non-interactive when a parent toggle disables the sub-controls */
+.settings-row.row-disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+/* Fully hidden (e.g. Moon-OBS row when Moon Kingdom is off) */
+.settings-row.row-gone { display: none; }
+
+/* ── Segmented control (Top / Bottom) ─────────────────────────────── */
+.segmented {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.seg-btn {
+  background: var(--bg-card2);
+  border: none;
+  color: var(--text-dim);
+  font-family: var(--font);
+  font-size: 0.85rem;
+  height: 32px;
+  padding: 0 14px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.seg-btn + .seg-btn { border-left: 1px solid var(--border); }
+.seg-btn:hover { background: var(--bg-hover); color: var(--text); }
+.seg-btn.active { background: var(--accent); color: #fff; }
+
+/* Select styled to match input-save-pair inputs */
+.settings-select {
+  background: var(--bg-card2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 0.9rem;
+  height: 32px;
+  width: 100px;
+  border-radius: var(--radius-sm);
+  text-align: center;
+  padding: 0 6px;
+  cursor: pointer;
+}
+.settings-select:focus { outline: none; border-color: var(--accent); }
+
+/* ── Loading Zones Modal ──────────────────────────────────────────── */
+.lz-modal-box {
+  max-width: 92vw;
+  width: 92vw;
+  height: 85vh;
+}
+
+.lz-scroll-wrap {
+  overflow: auto;
+  flex: 1;
+  /* Deliberately NOT scroll-behavior: smooth here: on Safari, if this
+     container's scroll position gets nudged for ANY reason (including
+     the auto-growing note textareas changing content height while you
+     type) while `scroll-behavior: smooth` is active, Safari can blur the
+     focused textarea mid-keystroke. Intentional scrolling (wheel / mouse
+     button / key bindings) still gets a smooth animation - it's done via
+     scrollTo({ behavior: 'smooth' }) in JS instead, so it never fires for
+     incidental content-size changes. */
+  /* Also disable native scroll anchoring: by default the browser will
+     silently re-adjust this container's scroll position whenever content
+     above the viewport resizes (exactly what the auto-growing note
+     textareas do on every keystroke). That adjustment happens even
+     without scroll-behavior: smooth, and is what was kicking focus out
+     of the note box after a single character. */
+  overflow-anchor: none;
+}
+
+#lz-content {
+  display: flex;
+  /* flex-direction: row;
+  align-items: flex-start; */
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 20px;
+  padding: 16px;
+  height: 100%;
+  min-width: max-content;
+}
+
+.lz-col-track {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 540px) {
+  .lz-modal-box { width: 100%; max-width: 100%; height: auto; max-height: 90vh;}
+  #lz-content {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    height: auto;
+    min-width: unset;
+    padding: 12px;
+    gap: 12px;
+  }
+}
+
+/* Kingdom column */
+.kingdom-col {
+  min-width: 190px;
+  flex-shrink: 0;
+}
+
+.kingdom-col-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+.kingdom-col-header img { height: 20px; flex-shrink: 0; }
+.kingdom-col-header .col-title { font-size: 1rem; }
+.kingdom-col-header .col-chevron {
+  margin-left: auto;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  transition: transform 0.2s;
+}
+.kingdom-col-header.collapsed .col-chevron  { transform: rotate(-90deg); }
+.kingdom-col-header.collapsed + .zones-container { display: none; }
+.kingdom-col-header.collapsed + .zones-split-wrap  { display: none; }
+
+/* Zone rows */
+.zones-container { display: flex; flex-direction: column; gap: 8px; }
+
+/* Zone columns auto-split for large kingdoms (> 12 zones) */
+.zones-split-wrap {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+@media (max-width: 540px) {
+  .zones-split-wrap {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+}
+
+.zone-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.zone-row-top {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.zone-icon {
+  height: 18px;
+  cursor: pointer;
+  flex-shrink: 0;
+  border-radius: 3px;
+  transition: opacity 0.15s;
+}
+.zone-icon:hover { opacity: 0.75; }
+
+.zone-name {
+  font-size: 0.85rem;
+  cursor: pointer;
+  flex: 1;
+  user-select: none;
+  transition: color 0.15s;
+}
+
+.zone-note {
+  background: var(--bg-card2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 0.8rem;
+  width: 100%;
+  padding: 5px 7px;
+  border-radius: var(--radius-sm);
+  resize: none;
+  min-height: 30px;
+  line-height: 1.4;
+  overflow: hidden;
+}
+.zone-note:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* ── Notes toolbar (layout orientation / columns / compact) ─────────── */
+/* Injected by JS above .lz-scroll-wrap in both the modal and notes.html. */
+.lz-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-card);
+  flex-shrink: 0;
+}
+.lz-toolbar-group { display: flex; align-items: center; gap: 6px; }
+.lz-toolbar-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+}
+.lz-toolbar .seg-btn { height: 28px; padding: 0 11px; font-size: 0.8rem; }
+/* Columns picker only matters in vertical mode */
+.lz-toolbar:not(.orient-vertical) .lz-cols-group { display: none; }
+
+.lz-compact-btn {
+  background: var(--bg-card2);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-family: var(--font);
+  font-size: 0.8rem;
+  height: 28px;
+  padding: 0 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.lz-compact-btn:hover { background: var(--bg-hover); color: var(--text); }
+.lz-compact-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* ── Vertical orientation ───────────────────────────────────────────── */
+/* Pack kingdoms into N balanced columns that scroll vertically, instead of
+   the default flex column-wrap masonry that grows horizontally. Each kingdom
+   stays intact (break-inside: avoid) and reads top-to-bottom, wrapping into
+   the next column. */
+#lz-content.lz-layout-vertical {
+  display: block;
+  height: auto;
+  width: 100%;
+  min-width: 0;
+  column-gap: 20px;
+}
+#lz-content.lz-layout-vertical.lz-cols-1 { column-count: 1; }
+#lz-content.lz-layout-vertical.lz-cols-2 { column-count: 2; }
+#lz-content.lz-layout-vertical.lz-cols-3 { column-count: 3; }
+
+#lz-content.lz-layout-vertical .kingdom-col {
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  page-break-inside: avoid;
+  width: 100%;
+  min-width: 0;
+  margin: 0 0 20px;
+  /* a hair of top padding keeps a kingdom from kissing the column top edge
+     when the browser breaks a column between two kingdoms */
+  padding-top: 1px;
+}
+/* Big kingdoms: stack their two split halves into a single column here */
+#lz-content.lz-layout-vertical .zones-split-wrap {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+}
+
+/* ── Compact density (works in either orientation) ──────────────────── */
+#lz-content.lz-compact { gap: 12px; }
+#lz-content.lz-compact.lz-layout-vertical { column-gap: 12px; }
+#lz-content.lz-compact .kingdom-col { margin-bottom: 12px; }
+#lz-content.lz-compact .kingdom-col-header { margin-bottom: 5px; }
+#lz-content.lz-compact .zones-container { gap: 4px; }
+#lz-content.lz-compact .zones-split-wrap { gap: 4px 12px; }
+#lz-content.lz-compact .zone-row { gap: 2px; }
+#lz-content.lz-compact .zone-row-top { gap: 4px; }
+#lz-content.lz-compact .zone-icon { height: 16px; }
+#lz-content.lz-compact .zone-name { font-size: 0.8rem; }
+#lz-content.lz-compact .zone-note {
+  min-height: 22px;
+  padding: 3px 6px;
+  font-size: 0.78rem;
+  line-height: 1.25;
+}
+
+/* ── Icon Picker Popup ───────────────────────────────────────────── */
+.icon-picker-popup {
+  position: fixed;
+  background: #222;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  width: 170px;
+  z-index: 9999;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+}
+
+.icon-picker-popup img {
+  height: 20px;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: opacity 0.1s, transform 0.1s;
+}
+.icon-picker-popup img:hover {
+  opacity: 0.8;
+  transform: scale(1.15);
+}
+
+/* ── Utility ─────────────────────────────────────────────────────── */
+.hidden { display: none !important; }
+
+/* Scrollbars */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #555; }
+/* ══ System tab buttons ═══════════════════════════════════════════════ */
+.settings-panel .sys-btn {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: var(--font);
+  font-size: 0.92rem;
+  font-weight: bold;
+  padding: 11px 14px;
+  margin-bottom: 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.sys-btn-blue { background: var(--accent); border-color: var(--accent); color: #fff; }
+.sys-btn-blue:hover { background: var(--accent-h); border-color: var(--accent-h); }
+.settings-panel .sys-btn-outline-blue { background: var(--btn-bg); border-color: var(--accent); color: var(--text); }
+.sys-btn-outline-blue:hover { background: #4d58cf38 }
+.settings-panel .sys-btn-outline-orange { background: var(--btn-bg); border-color: #ff9800; color: var(--text); }
+.sys-btn-outline-orange:hover { background: #be740423 }
+
+/* ══ Tracker Moon Count box (matches #controls look/padding) ═══════════ */
+#moon-total-box {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-weight: bold;
+  font-size: 1.05rem;
+}
+#moon-total-box .mt-sep { color: var(--text-dim); }
+#moon-total-box .mt-left-wrap { color: var(--accent); }
+
+/* ══ Zone Names modal ═════════════════════════════════════════════════ */
+.zone-names-modal-box {
+  width: min(560px, 94vw);
+  max-height: 88vh;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.zone-names-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--bg-card2);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.zone-names-title {
+  font-size: 0.95rem;
+  color: var(--text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.zone-names-body {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 14px 16px;
+}
+.zn-save-btn {
+  background: var(--accent);
+  border: 1px solid var(--accent);
+  color: #fff;
+  font-family: var(--font);
+  font-size: 0.9rem;
+  font-weight: bold;
+  padding: 7px 16px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.zn-save-btn:hover { background: var(--accent-h); border-color: var(--accent-h); }
+.zn-ingame-btn {
+  background: var(--btn-bg);
+  border: 1px solid #ff9800;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 0.9rem;
+  padding: 7px 14px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.zn-ingame-btn:hover { background: #be740423; }
+.zn-revert-btn {
+  background: var(--btn-bg);
+  border: 1px solid var(--red);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 0.9rem;
+  padding: 7px 16px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.zn-revert-btn:hover { background: var(--btn-hover); }
+.zn-kingdom { margin-bottom: 18px; }
+.zn-kingdom-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-weight: bold;
+  font-size: 1rem;
+}
+.zn-kingdom-header img { height: 22px; width: auto; }
+.zn-zone { margin-bottom: 10px; }
+.zn-ingame {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  margin-bottom: 2px;
+}
+.zn-input {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--bg-card2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 0.9rem;
+  padding: 7px 9px;
+}
+.zn-input:focus { outline: none; border-color: var(--accent); }
+/* ══ System tab: Hotkeys button (gray body, green outline) ════════════ */
+.settings-panel .sys-btn-outline-green { background: var(--btn-bg); border-color: var(--green); color: var(--text); }
+.sys-btn-outline-green:hover { background: #4ade8022; }
+
+/* ══ Side Panel mode (4 segmented buttons) ════════════════════════════ */
+/* Off / Notes / Map / Abilities & Captures doesn't fit on one line in the
+   Settings modal, so this row stacks its label above the buttons and lets the
+   buttons wrap instead of overflowing. */
+.settings-row.settings-row-stack {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 7px;
+}
+.settings-row.settings-row-stack > span { flex: none; }
+.segmented.segmented-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+.segmented-wrap .seg-btn { flex: 1 1 auto; padding: 0 10px; }
+
+/* ══ Hotkeys modal ════════════════════════════════════════════════════ */
+.hotkeys-modal-box { width: min(520px, 94vw); max-height: 88vh; display: flex; flex-direction: column; }
+.hotkeys-body { display: flex; flex-direction: column; }
+
+.hotkeys-hint {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+  margin: 8px 0 0;
+}
+.hotkeys-hint strong { color: var(--text); }
+.hotkeys-hint-dim { margin-bottom: 4px; }
+
+#hotkeys-list {
+  margin-top: 10px;
+  border-top: 1px solid var(--border);
+  padding-top: 4px;
+  transition: opacity 0.15s;
+}
+/* Bindings stay editable while the master toggle is off, just visibly inert. */
+#hotkeys-list.hotkeys-off { opacity: 0.5; }
+
+.hotkey-row { padding: 4px 0; }
+.hotkey-btn { min-width: 120px; text-align: center; }
+
+/* ══ Abilities & Captures panel (apc.html) ════════════════════════════ */
+body.apc-body {
+  padding: 10px;
+  gap: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ── Top bar ── */
+.apc-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 9px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.apc-toolbar .seg-btn { height: 28px; padding: 0 10px; font-size: 0.78rem; }
+
+.apc-search {
+  background: var(--bg-card2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 0.82rem;
+  height: 28px;
+  padding: 0 10px;
+  flex: 1 1 130px;
+  min-width: 110px;
+}
+.apc-search:focus { outline: none; border-color: var(--accent); }
+.apc-search::placeholder { color: var(--text-dim); }
+
+.apc-toolbar-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  cursor: pointer;
+  white-space: nowrap;
+}
+/* Smaller than the Settings toggles so it sits comfortably in the bar. */
+.apc-toolbar-toggle .toggle-switch { width: 36px; height: 20px; }
+.apc-toolbar-toggle .toggle-track { border-radius: 10px; }
+.apc-toolbar-toggle .toggle-track::after { width: 14px; height: 14px; top: 3px; left: 3px; }
+.apc-toolbar-toggle input:checked + .toggle-track::after { transform: translateX(16px); }
+
+.apc-reset-btn {
+  background: var(--btn-bg);
+  border: 1px solid var(--red);
+  border-radius: var(--radius-sm);
+  color: var(--red);
+  font-family: var(--font);
+  font-size: 0.78rem;
+  height: 28px;
+  padding: 0 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+.apc-reset-btn:hover { background: #3a2020; }
+
+.apc-popout-btn {
+  background: var(--btn-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 0.78rem;
+  height: 28px;
+  padding: 0 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+.apc-popout-btn:hover { background: var(--bg-hover); }
+
+/* ── Sections ── */
+.apc-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding-top: 10px;
+}
+.apc-section + .apc-section { margin-top: 18px; }
+
+.apc-section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  padding: 2px 0 5px;
+  z-index: 2;
+}
+.apc-section-header h2 { font-size: 0.95rem; }
+.apc-counter {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.apc-empty { font-size: 0.82rem; color: var(--text-dim); padding: 6px 2px; }
+.apc-empty.hidden { display: none; }
+
+/* ── Grid: fit as many per row as the panel width allows ── */
+.apc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--apc-cell), 1fr));
+  gap: 6px 8px;
+  align-items: start;
+}
+body.apc-size-small  { --apc-cell: 96px;  --apc-icon: 26px; --apc-font: 0.68rem; }
+body.apc-size-medium { --apc-cell: 124px; --apc-icon: 34px; --apc-font: 0.76rem; }
+body.apc-size-large  { --apc-cell: 160px; --apc-icon: 46px; --apc-font: 0.85rem; }
+
+/* Icons-only mode (Hide Labels). With the text gone the cell no longer needs
+   room for a caption, so shrink it to roughly the icon's footprint - that
+   packs more per row - and bump the icon sizes up a tier so they read bigger. */
+body.apc-hide-labels.apc-size-small  { --apc-cell: 52px; --apc-icon: 40px; }
+body.apc-hide-labels.apc-size-medium { --apc-cell: 70px; --apc-icon: 56px; }
+body.apc-hide-labels.apc-size-large  { --apc-cell: 92px; --apc-icon: 76px; }
+body.apc-hide-labels .apc-label { display: none; }
+/* Centre the lone icon in its cell now there's no label beside it. */
+body.apc-hide-labels .apc-item { justify-content: center; gap: 0; }
+
+.apc-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+
+.apc-icon-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  padding: 3px;
+  cursor: pointer;
+  flex-shrink: 0;
+  line-height: 0;
+  transition: background 0.15s, border-color 0.15s;
+}
+.apc-icon-btn:hover { background: var(--bg-hover); border-color: var(--border); }
+.apc-icon-btn img {
+  width: var(--apc-icon);
+  height: var(--apc-icon);
+  object-fit: contain;
+  display: block;
+  transition: filter 0.15s;
+}
+
+/* Locked = flat #868686 silhouette. brightness(0) knocks every pixel to black
+   while keeping the alpha channel, then invert(52.55%) lifts black to exactly
+   rgb(134,134,134). No second set of grayed-out image files needed. */
+.apc-item.locked .apc-icon-btn img { filter: brightness(0) invert(52.55%); }
+.apc-item.unlocked .apc-icon-btn img { filter: none; }
+
+.apc-label {
+  font-size: var(--apc-font);
+  color: var(--text-dim);
+  cursor: pointer;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+  transition: color 0.15s;
+}
+.apc-item.unlocked .apc-label { color: var(--green); }
+.apc-label:hover { color: var(--text); }
+.apc-item.unlocked .apc-label:hover { color: var(--green); filter: brightness(1.2); }
+
+/* Image file missing from assets/capture or assets/ability - keep the row
+   usable instead of showing a broken-image icon. */
+.apc-item.apc-missing .apc-icon-btn img { visibility: hidden; }
+.apc-item.apc-missing .apc-icon-btn {
+  border: 1px dashed var(--border);
+  background: var(--bg-card2);
+}
+/* ══ Spoiler Log ══════════════════════════════════════════════════════ */
+/* System-tab button: gray fill, yellow border */
+.settings-panel .sys-btn-gray-yellow {
+  background: var(--bg-card2);
+  border-color: #ffd93d;
+  color: var(--text);
+}
+.settings-panel .sys-btn-gray-yellow:hover { background: #ffd93d1f; }
+
+/* Backdrop: padding on all sides so the box never touches the screen edge */
+.sl-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.78);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  padding: clamp(10px, 2.4vw, 28px);
+  box-sizing: border-box;
+}
+.sl-modal-backdrop.hidden { display: none; }
+
+/* Box: as wide/tall as the padding allows */
+.sl-modal-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  width: 100%;
+  height: 100%;
+  max-width: 1400px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Top bar: Automate (left) title Upload / close (right) */
+.sl-topbar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-card);
+}
+.sl-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.05rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.2;
+}
+.sl-filename {
+  font-weight: normal;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  max-width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sl-topright { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
+
+.sl-topbtn {
+  font-family: var(--font);
+  font-size: 0.85rem;
+  font-weight: bold;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s;
+}
+.sl-topbtn-left  { background: var(--bg-card2); border-color: #ff9800; color: var(--text); }
+.sl-topbtn-left:hover  { background: #ff98001f; }
+.sl-topbtn-right { background: var(--bg-card2); border-color: #ffd93d; color: var(--text); }
+.sl-topbtn-right:hover { background: #ffd93d1f; }
+.sl-close {
+  background: none; border: none; color: var(--text-dim);
+  font-size: 1.15rem; cursor: pointer; padding: 4px 8px; line-height: 1;
+}
+.sl-close:hover { color: var(--text); }
+
+/* Search bar: below the topbar, above the nav/body content */
+.sl-searchbar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-card);
+}
+.sl-search-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  background: var(--bg-card2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 0.85rem;
+  padding: 7px 10px;
+  box-sizing: border-box;
+}
+.sl-search-input:focus { outline: none; border-color: #ffd93d; }
+.sl-search-count {
+  flex: 0 0 auto;
+  min-width: 42px;
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+}
+.sl-search-btn {
+  flex: 0 0 auto;
+  background: var(--bg-card2);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  padding: 6px 9px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.sl-search-btn:hover { background: var(--bg-hover); color: var(--text); }
+
+mark.sl-hit {
+  background: #ffd93d66;
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 1px;
+}
+mark.sl-hit-current {
+  background: #ff9800;
+  color: #181818;
+}
+
+/* Nav chips for sections with zero search hits */
+.sl-nav-item.sl-nav-dim { opacity: 0.35; }
+
+/* Content: nav rail + scrollable body. Stacks on mobile. */
+.sl-content { flex: 1 1 auto; display: flex; min-height: 0; }
+.sl-nav {
+  flex: 0 0 210px;
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.sl-nav-item {
+  text-align: left;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-family: var(--font);
+  font-size: 0.86rem;
+  padding: 7px 9px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+.sl-nav-item:hover { background: var(--bg-hover); color: var(--text); }
+
+.sl-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 16px 20px;
+  min-width: 0;
+}
+.sl-section { margin-bottom: 26px; }
+.sl-section-title {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  color: #ffd93d;
+  position: sticky;
+  top: -16px;
+  background: var(--bg-card);
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+}
+.sl-section-lines {
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: var(--text);
+}
+
+/* Mobile: stack nav on top as a horizontal scroller, body below */
+@media (max-width: 720px) {
+  .sl-content { flex-direction: column; }
+  .sl-nav {
+    flex: 0 0 auto;
+    flex-direction: row;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+  }
+  .sl-nav-item { flex: 0 0 auto; }
+  .sl-title { font-size: 0.95rem; }
+  .sl-topbtn { padding: 7px 9px; font-size: 0.78rem; }
+  .sl-body { padding: 12px 14px; }
+  .sl-searchbar { padding: 8px 10px; }
+  .sl-search-count { min-width: 34px; }
+}

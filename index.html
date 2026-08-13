@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>SMO Randomizer Tracker</title>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="assets/SMO-ColoredGlobe.png">
+</head>
+
+<body>
+  <div id="layout-row">
+  <div id="app">
+    <h1 class="header">
+      <span>SMO Randomizer Tracker</span>
+      <button class="ctrl-btn gear-btn" id="btn-settings"
+        style="position: absolute; right: 0; top: 50%; transform: translateY(-50%);">⚙</button>
+    </h1>
+    <!-- Moon Rows -->
+    <div id="moon-rows"></div>
+
+    <!-- Sync -->
+    <div id="sync-section">
+      <div id="sync-room-row">
+        <input type="password" id="input-room-code" placeholder="Room code" maxlength="12" spellcheck="false">
+        <button class="ctrl-btn" id="btn-toggle-visibility" title="Show/hide room code and URL">Show</button>
+        <button class="ctrl-btn" id="btn-generate-room">Generate</button>
+        <button class="ctrl-btn" id="btn-connect-room">Connect</button>
+      </div>
+      <div id="sync-status">Offline. Enter a room code to sync</div>
+      <div id="sync-url-row" class="hidden">
+        <input type="password" id="input-obs-url" readonly>
+        <button class="ctrl-btn" id="btn-copy-obs-url">Copy OBS URL</button>
+      </div>
+      <div id="sync-size-row" class="hidden">OBS size: <strong>945</strong> × <strong>1350</strong></div>
+    </div>
+
+    <!-- Tracker Moon Count (toggled via Settings → Main). Same look as #controls. -->
+    <div id="moon-total-box" class="hidden">
+      <span class="mt-frac"><span class="mt-counted">0</span> / <span class="mt-req">124</span></span>
+      <span class="mt-sep">:</span>
+      <span class="mt-left-wrap"><span class="mt-left">0</span> Left</span>
+    </div>
+
+    <!-- Controls -->
+    <div id="controls">
+      <div id="capture-section">
+        <div id="capture-row"></div>
+      </div>
+
+      <div id="button-section">
+        <div id="obs-btn-row">
+          <button class="ctrl-btn" id="btn-obs">Open Popup</button>
+          <button class="ctrl-btn info-btn" id="btn-obs-info" title="OBS Setup Help">ℹ️</button>
+        </div>
+        <button class="ctrl-btn danger-btn" id="btn-clear">Clear</button>
+      </div>
+
+      <div id="notes-section"></div>
+
+      <div id="ability-section">
+        <div id="ability-row"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Side Panel ──────────────────────────────────────────────
+       Embeds notes.html or map.html (same origin, so they share
+       localStorage with this page) beside the main tracker. Notes and
+       Map are mutually exclusive and controlled from Settings → Main,
+       or by clicking the (repurposed) Loading Zone Notes / Connection
+       Map buttons. Hidden below the mobile breakpoint - see app.js
+       applySidePanel(). -->
+  <div id="side-panel" class="hidden">
+    <div class="side-panel-header">
+      <span id="side-panel-title">Panel</span>
+      <button class="modal-close" id="side-panel-close" aria-label="Close panel">✕</button>
+    </div>
+    <iframe id="side-panel-frame" title="Side panel content"></iframe>
+  </div>
+  </div>
+
+  <!-- ── OBS Info Modal ──────────────────────────────────────────── -->
+  <div id="obs-info-modal" class="modal-backdrop hidden" role="dialog" aria-label="OBS Setup Info">
+    <div class="modal-box obs-info-modal-box">
+      <div class="modal-header">
+        <h2>ℹ️ OBS Setup</h2>
+        <button class="modal-close" id="obs-info-close" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body obs-info-body">
+        <p class="info-title">Browser Source <span class="info-tag">Recommended</span></p>
+        <ol>
+          <li>Enter or generate a <strong>Room Code</strong> in the tracker, then click <strong>Connect</strong></li>
+          <li>Copy the <strong>OBS URL</strong> that appears</li>
+          <li>In OBS add a <strong>Browser Source</strong></li>
+          <li>Paste the OBS URL. Default size is <strong>945</strong> × <strong>1350</strong></li>
+          <li>To make the overlay larger, change <strong>Popup Scale</strong> in Settings. The <strong>Browser Source Scale</strong> is always 3x that value, and the sync section shows
+            the calculated width and height to paste into OBS.
+          </li>
+          <li>The overlay background is transparent so no chroma key needed</li>
+        </ol>
+        <p class="info-title">Popup Window</p>
+        <p>Click <strong>Open Popup</strong> to open a window with a dark background sized to your <strong>Popup Scale</strong>, then capture it with Window Capture in OBS. You can add a <strong>color key</strong> in the format options to remove the dark gray background(<code>#181818</code>).
+        </p>
+        <p>Do not minimize the Popup when using with OBS as that will cause the popup not to function correctly, hide it behind another tab if needed.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Settings Modal ─────────────────────────────────────────── -->
+  <div id="settings-modal" class="modal-backdrop hidden" role="dialog" aria-label="Settings">
+    <div class="modal-box settings-modal-box">
+      <div class="modal-header">
+        <h2>⚙ Settings</h2>
+        <button class="modal-close" id="settings-close" aria-label="Close">✕</button>
+      </div>
+
+      <!-- Tab bar. Each button's data-tab matches a panel's data-panel below.
+           Horizontally scrollable on narrow screens. -->
+      <div class="settings-tabs" role="tablist">
+        <button class="settings-tab active" data-tab="main" role="tab">Main</button>
+        <button class="settings-tab" data-tab="kingdom" role="tab">Kingdom Tracking</button>
+        <button class="settings-tab" data-tab="streamer" role="tab">Streamer</button>
+        <button class="settings-tab" data-tab="notes" role="tab">Notes</button>
+        <button class="settings-tab" data-tab="system" role="tab">System</button>
+      </div>
+
+      <div class="modal-body settings-body">
+
+        <!-- ══ MAIN TAB ═════════════════════════════════════════════ -->
+        <div class="settings-panel active" data-panel="main">
+
+          <div class="settings-row">
+            <span>Toggle Total Moon Count</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-moon-total">
+              <span class="toggle-track"></span>
+            </label>
+          </div>
+
+          <div class="settings-row">
+            <span>Tracker Moon Count</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-tracker-moon-count">
+              <span class="toggle-track"></span>
+            </label>
+          </div>
+
+          <div class="settings-row">
+            <span>Toggle Icon Colors</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-icon-colors">
+              <span class="toggle-track"></span>
+            </label>
+          </div>
+
+          <div class="settings-row">
+            <span>Toggle Lock Sign</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-lock">
+              <span class="toggle-track"></span>
+            </label>
+          </div>
+
+          <div class="settings-row">
+            <span>Toggle Peace Sign</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-peace">
+              <span class="toggle-track"></span>
+            </label>
+          </div>
+
+          <div class="settings-row">
+            <span>Toggle Moon Rock Sign</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-rock">
+              <span class="toggle-track"></span>
+            </label>
+          </div>
+
+          <!-- Ability Lock sub-section. The Jump / Cap Bounce toggles only do
+               anything while Ability Lock itself is on, so they're disabled
+               (dimmed) when it's off. -->
+          <div class="settings-subsection" id="subsection-ability">
+            <div class="subsection-title">Ability Lock</div>
+            <div class="settings-row">
+              <span>Toggle Ability Lock</span>
+              <label class="toggle-switch">
+                <input type="checkbox" id="toggle-ability-lock">
+                <span class="toggle-track"></span>
+              </label>
+            </div>
+            <div class="settings-row settings-subrow">
+              <span>Show Jump</span>
+              <label class="toggle-switch">
+                <input type="checkbox" id="toggle-ability-jump">
+                <span class="toggle-track"></span>
+              </label>
+            </div>
+            <div class="settings-row settings-subrow">
+              <span>Show Cap Bounce</span>
+              <label class="toggle-switch">
+                <input type="checkbox" id="toggle-ability-cap">
+                <span class="toggle-track"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="settings-row">
+            <span>Toggle Captures</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-captures">
+              <span class="toggle-track"></span>
+            </label>
+          </div>
+
+          <div class="settings-row">
+            <span>Toggle Save Buttons</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-save-buttons">
+              <span class="toggle-track"></span>
+            </label>
+          </div>
+
+          <div class="settings-row">
+            <span>Highlight Complete Moons (Green)</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-complete-color">
+              <span class="toggle-track"></span>
+            </label>
+          </div>
+
+          <!-- Side Panel sub-section. Notes and Map are mutually exclusive -
+               turning one on turns the other off (enforced in app.js).
+               Horizontal needs room beside the tracker, so it's unavailable
+               below the mobile breakpoint (the setting is kept, just not
+               rendered, until the screen is wide enough again). Vertical
+               stacks below the tracker instead, so it stays available at
+               any width, including mobile. -->
+          <div class="settings-subsection" id="subsection-panel">
+            <div class="subsection-title">Side Panel</div>
+            <!-- Only one panel can be open at a time, so these are segmented
+                 buttons (same control style as Location below) rather than
+                 separate toggles. Off = no panel. Values map to
+                 settings.panel_mode - see applySidePanel() in app.js. -->
+            <div class="settings-row settings-row-stack">
+              <span>Panel</span>
+              <div class="segmented segmented-wrap" id="seg-panel-mode">
+                <button type="button" class="seg-btn" data-value="none">Off</button>
+                <button type="button" class="seg-btn" data-value="notes">Notes</button>
+                <button type="button" class="seg-btn" data-value="map">Map</button>
+                <button type="button" class="seg-btn" data-value="apc">Abilities &amp; Captures</button>
+              </div>
+            </div>
+            <div class="settings-row settings-subrow">
+              <span>Location</span>
+              <div class="segmented" id="seg-panel-location">
+                <button type="button" class="seg-btn" data-value="horizontal">Horizontal</button>
+                <button type="button" class="seg-btn" data-value="vertical">Vertical</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+
+        <!-- ══ KINGDOM TRACKING TAB ═════════════════════════════════ -->
+        <div class="settings-panel" data-panel="kingdom">
+
+          <div class="settings-row">
+            <span>Toggle Multi Moon</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-multi-moon">
+              <span class="toggle-track"></span>
+            </label>
+          </div>
+
+          <div class="settings-row">
+            <span>Toggle Moon Min/Max Range</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-moon-range">
+              <span class="toggle-track"></span>
+            </label>
+          </div>
+
+          <div class="settings-row">
+            <span>Total Moon Requirement</span>
+            <div class="input-save-pair">
+              <input type="number" id="input-moon-req" placeholder="124" min="1" max="9999">
+              <button class="save-inline-btn" id="save-moon-req">Save</button>
+            </div>
+          </div>
+
+          <!-- Each kingdom toggle shows/hides that kingdom on the main tracker
+               and in Notes. To add another one later: copy this row (swap the
+               id and label), then see the matching comment next to
+               KINGDOM_VISIBILITY_SETTINGS in app.js for the rest of the steps.
+
+               "Show on OBS Overlay" is a sub-toggle of Moon Kingdom: it only
+               appears while Moon Kingdom is on, and controls whether the extra
+               row is drawn on the OBS overlay (which also grows its height). -->
+          <div class="settings-row">
+            <span>Cap Kingdom</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-kingdom-cap">
+              <span class="toggle-track"></span>
+            </label>
+          </div>
+
+          <div class="settings-row settings-subrow" id="row-cap-obs">
+            <span>Show Cap Kingdom on OBS</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-cap-obs">
+              <span class="toggle-track"></span>
+            </label>
+          </div>
+
+          <div class="settings-row">
+            <span>Moon Kingdom</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-kingdom-moon">
+              <span class="toggle-track"></span>
+            </label>
+          </div>
+
+          <div class="settings-row settings-subrow" id="row-moon-obs">
+            <span>Show Moon Kingdom on OBS</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-moon-obs">
+              <span class="toggle-track"></span>
+            </label>
+          </div>
+
+        </div>
+
+        <!-- ══ STREAMER TAB ═════════════════════════════════════════ -->
+        <div class="settings-panel" data-panel="streamer">
+
+          <div class="settings-row">
+            <span>Popup Scale</span>
+            <div class="input-save-pair">
+              <input type="number" id="input-overlay-scale" placeholder="1" min="0.1" max="10" step="0.1">
+              <button class="save-inline-btn" id="save-overlay-scale">Save</button>
+            </div>
+          </div>
+
+          <div class="settings-row">
+            <span>Browser Source Scale</span>
+            <div class="input-save-pair">
+              <input type="number" id="input-browser-source-scale" value="3" readonly disabled title="Always 3x the Popup Scale">
+            </div>
+          </div>
+
+          <div class="settings-row">
+            <span>Sync Server URL</span>
+            <div class="input-save-pair">
+              <input type="text" id="input-ws-url" placeholder="wss://smo-rand.johnnycyan.com/ws" spellcheck="false">
+              <button class="save-inline-btn" id="save-ws-url">Save</button>
+            </div>
+          </div>
+
+          <!-- Moon Updater sub-section. Location + Message Count only matter
+               while the updater is on, so they're disabled when it's off. -->
+          <div class="settings-subsection" id="subsection-updater">
+            <div class="subsection-title">Moon Updater</div>
+            <div class="settings-row">
+              <span>Toggle Moon Updater</span>
+              <label class="toggle-switch">
+                <input type="checkbox" id="toggle-moon-updater">
+                <span class="toggle-track"></span>
+              </label>
+            </div>
+            <div class="settings-row settings-subrow">
+              <span>Location</span>
+              <div class="segmented" id="seg-updater-location">
+                <button type="button" class="seg-btn" data-value="top">Top</button>
+                <button type="button" class="seg-btn" data-value="bottom">Bottom</button>
+              </div>
+            </div>
+            <div class="settings-row settings-subrow">
+              <span>Message Count</span>
+              <div class="input-save-pair">
+                <select id="select-updater-count" class="settings-select">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ══ NOTES TAB ════════════════════════════════════════════ -->
+        <div class="settings-panel" data-panel="notes">
+
+          <div class="settings-row">
+            <span>Painting Tracker</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="toggle-painting-notes">
+              <span class="toggle-track"></span>
+            </label>
+          </div>
+
+          <div class="settings-row">
+            <span>Notes Scroll Speed (px)</span>
+            <div class="input-save-pair">
+              <input type="number" id="input-notes-scroll" placeholder="100" min="10" max="2000">
+              <button class="save-inline-btn" id="save-notes-scroll">Save</button>
+            </div>
+          </div>
+
+          <div class="settings-row">
+            <span>Scroll Left Button</span>
+            <button class="rebind-btn" id="rebind-scroll-left">Mouse 4</button>
+          </div>
+
+          <div class="settings-row">
+            <span>Scroll Right Button</span>
+            <button class="rebind-btn" id="rebind-scroll-right">Mouse 5</button>
+          </div>
+
+        </div>
+
+        <!-- ══ SYSTEM TAB ═══════════════════════════════════════════ -->
+        <div class="settings-panel" data-panel="system">
+
+          <button class="sys-btn sys-btn-outline-orange" id="btn-zone-names">Zone Names</button>
+
+          <button class="sys-btn sys-btn-outline-green" id="btn-hotkeys">Hotkeys</button>
+
+          <button class="sys-btn sys-btn-blue" id="btn-download-save">Download Save State</button>
+
+          <button class="sys-btn sys-btn-outline-blue" id="btn-load-save">Load Save State</button>
+          <input type="file" id="input-load-save" accept="application/json,.json" hidden>
+
+          <!-- Spoiler Log: gray fill, yellow border. Last option in System.
+               Wired up in spoiler-log.js. -->
+          <button class="sys-btn sys-btn-gray-yellow" id="btn-spoiler-log">Spoiler Log</button>
+          <input type="file" id="sl-file-input" accept=".txt,text/plain" hidden>
+
+        </div>
+
+      </div>
+
+      <div class="settings-footer">
+        <button class="ctrl-btn revert-btn" id="btn-revert-settings">Revert to Default Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Loading Zones Modal ───────────────────────────────────── -->
+  <div id="lz-modal" class="modal-backdrop hidden" role="dialog" aria-label="Loading Zone Notes">
+    <div class="modal-box lz-modal-box">
+      <div class="modal-header">
+        <h2>Loading Zone Notes</h2>
+        <div class="modal-header-actions">
+          <button class="modal-icon-btn-red" id="lz-clear-notes" title="Clear all notes">Clear</button>
+          <button class="modal-icon-btn" id="lz-popout" title="Open in separate window">↗️</button>
+          <button class="modal-close" id="lz-close" aria-label="Close">✕</button>
+        </div>
+      </div>
+      <div class="lz-scroll-wrap">
+        <div id="lz-content"></div>
+      </div>
+    </div>
+  </div>
+  <!-- ── Zone Names Modal ──────────────────────────────────────── -->
+  <div id="zone-names-modal" class="modal-backdrop hidden" role="dialog" aria-label="Zone Names">
+    <div class="modal-box zone-names-modal-box">
+      <div class="zone-names-topbar">
+        <button class="zn-save-btn" id="zn-save">Save</button>
+        <button class="zn-ingame-btn" id="zn-use-ingame">Use In-Game Names</button>
+        <button class="zn-revert-btn" id="zn-revert">Revert to Default</button>
+      </div>
+      <div class="zone-names-body" id="zone-names-body"></div>
+    </div>
+  </div>
+
+  <!-- ── Hotkeys Modal ─────────────────────────────────────────── -->
+  <!-- One binding per kingdom. The bound key alone adds a moon, Shift + it
+       removes one (clamped at 0), Ctrl + it adds a multi moon (+3) - same as
+       clicking the multi-moon button. Bindings are stored as KeyboardEvent
+       .code values, so Shift/Ctrl combos never collide with the base key
+       (e.g. Moon Kingdom is bound to the physical "=/+" key: "Equal"). The
+       whole thing is inert while the toggle is off, and while a text field is
+       focused, so typing in Total Moon Requirement never fires a hotkey. -->
+  <div id="hotkeys-modal" class="modal-backdrop hidden" role="dialog" aria-label="Hotkeys">
+    <div class="modal-box hotkeys-modal-box">
+      <div class="modal-header">
+        <h2>⌨ Hotkeys</h2>
+        <button class="modal-close" id="hotkeys-close" aria-label="Close">✕</button>
+      </div>
+
+      <div class="modal-body hotkeys-body">
+        <div class="settings-row">
+          <span>Enable Hotkeys</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="toggle-hotkeys">
+            <span class="toggle-track"></span>
+          </label>
+        </div>
+
+        <p class="hotkeys-hint">
+          <strong>Key</strong> adds a moon &nbsp;·&nbsp;
+          <strong>Shift + Key</strong> removes one &nbsp;·&nbsp;
+          <strong>Ctrl + Key</strong> adds a multi moon (+3)
+        </p>
+        <p class="hotkeys-hint hotkeys-hint-dim">
+          Hotkeys only work while this tab is focused - a web page can't read the
+          keyboard in the background. They're also ignored while you're typing in
+          any text box.
+        </p>
+
+        <div id="hotkeys-list"></div>
+      </div>
+
+      <div class="settings-footer">
+        <button class="ctrl-btn revert-btn" id="hotkeys-reset">Reset to Default Hotkeys</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="author-credit">Made by FireRisingRaging, Just Bag, gmo7, and JohnnyCyan</div>
+
+  <!-- ── Icon Picker (appended to body by JS) ──────────────────── -->
+
+  <script src="sync.js"></script>
+  <script src="apc-data.js?v=2"></script>
+  <script src="app.js?v=2"></script>
+  <script src="spoiler-log.js?v=1"></script>
+</body>
+
+</html>

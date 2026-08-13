@@ -1,0 +1,6300 @@
+{
+  "_meta": {
+    "generated_from": [
+      "route_edges.csv",
+      "rooms.csv",
+      "logic_tokens.csv",
+      "map.html ZONE_IMAGES"
+    ],
+    "note": "map_node<->loading_zone_name join is via map.html ZONE_IMAGES (backend stage). in_game_name is rooms.stage_display_name. getting_to_the_zone = overworld approach to '::home_in' door; in_the_zone = subarea-internal traversal. Every requirement alternative (top-level '|' branch) is preserved with its difficulty.",
+    "ambiguous_stages": {
+      "ForestWorldHomeStage": [
+        "kingdom:Wooded",
+        "zone:Wooded:DW Odyssey",
+        "zone:Wooded:DW Pond"
+      ],
+      "SeaWorldHomeStage": [
+        "kingdom:Seaside",
+        "zone:Seaside:Well Exit"
+      ],
+      "Special2WorldHomeStage": [
+        "kingdom:Darkerside",
+        "zone:Darkerside:End"
+      ],
+      "SandWorldShopStage": [
+        "zone:Sand:Shop",
+        "zone:Sand:Employees"
+      ],
+      "CityWorldShop01Stage": [
+        "zone:Metro:Yellow Shop",
+        "zone:Metro:Purple Shop"
+      ]
+    }
+  },
+  "zones": [
+    {
+      "map_node": "kingdom:Bowser's",
+      "loading_zone_name": "SkyWorldHomeStage",
+      "in_game_name": "Bowser's Kingdom",
+      "kingdom": "Bowser's Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "kingdom:Cap",
+      "loading_zone_name": "CapWorldHomeStage",
+      "in_game_name": "Cap Kingdom",
+      "kingdom": "Cap Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "kingdom:Cascade",
+      "loading_zone_name": "WaterfallWorldHomeStage",
+      "in_game_name": "Cascade Kingdom",
+      "kingdom": "Cascade Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "kingdom:Cloud",
+      "loading_zone_name": "CloudWorldHomeStage",
+      "in_game_name": "Cloud Kingdom",
+      "kingdom": "Cloud Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "kingdom:Darkerside",
+      "loading_zone_name": "Special2WorldHomeStage",
+      "in_game_name": "Darker Side",
+      "kingdom": "Darker Side",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [],
+      "shares_stage_with": [
+        "zone:Darkerside:End"
+      ]
+    },
+    {
+      "map_node": "kingdom:Darkside",
+      "loading_zone_name": "Special1WorldHomeStage",
+      "in_game_name": "Dark Side",
+      "kingdom": "Dark Side",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "kingdom:Lake",
+      "loading_zone_name": "LakeWorldHomeStage",
+      "in_game_name": "Lake Kingdom",
+      "kingdom": "Lake Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "kingdom:Lost",
+      "loading_zone_name": "ClashWorldHomeStage",
+      "in_game_name": "Lost Kingdom",
+      "kingdom": "Lost Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "kingdom:Luncheon",
+      "loading_zone_name": "LavaWorldHomeStage",
+      "in_game_name": "Luncheon Kingdom",
+      "kingdom": "Luncheon Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "kingdom:Metro",
+      "loading_zone_name": "CityWorldHomeStage",
+      "in_game_name": "Metro Kingdom",
+      "kingdom": "Metro Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "kingdom:Moon",
+      "loading_zone_name": "MoonWorldHomeStage",
+      "in_game_name": "Moon Kingdom",
+      "kingdom": "Moon Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "kingdom:Mushroom",
+      "loading_zone_name": "PeachWorldHomeStage",
+      "in_game_name": "Mushroom Kingdom",
+      "kingdom": "Mushroom Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "kingdom:Ruined",
+      "loading_zone_name": "BossRaidWorldHomeStage",
+      "in_game_name": "Ruined Kingdom",
+      "kingdom": "Ruined Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "kingdom:Sand",
+      "loading_zone_name": "SandWorldHomeStage",
+      "in_game_name": "Sand Kingdom",
+      "kingdom": "Sand Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "kingdom:Seaside",
+      "loading_zone_name": "SeaWorldHomeStage",
+      "in_game_name": "Seaside Kingdom",
+      "kingdom": "Seaside Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [],
+      "shares_stage_with": [
+        "zone:Seaside:Well Exit"
+      ]
+    },
+    {
+      "map_node": "kingdom:Snow",
+      "loading_zone_name": "SnowWorldHomeStage",
+      "in_game_name": "Snow Kingdom",
+      "kingdom": "Snow Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "kingdom:Wooded",
+      "loading_zone_name": "ForestWorldHomeStage",
+      "in_game_name": "Wooded Kingdom",
+      "kingdom": "Wooded Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [],
+      "shares_stage_with": [
+        "zone:Wooded:DW Odyssey",
+        "zone:Wooded:DW Pond"
+      ]
+    },
+    {
+      "map_node": "zone:Bowser's:Hexagon Tower",
+      "loading_zone_name": "KaronWingTowerStage",
+      "in_game_name": "Hexagon Tower",
+      "kingdom": "Bowser's Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Bowser's:Jizo",
+      "loading_zone_name": "JizoSwitchExStage",
+      "in_game_name": "Jizo's Great Adventure",
+      "kingdom": "Bowser's Kingdom",
+      "captures_needed": [
+        "Jizo"
+      ],
+      "abilities_needed": [
+        "Wall Jump",
+        "Vault",
+        "Dive",
+        "Neutral Throw",
+        "Ledge Grab"
+      ],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Statue",
+              "name": "Jizo",
+              "type": "capture",
+              "aliases": [
+                "Jizo",
+                "StatueJizo"
+              ]
+            },
+            {
+              "token": "WallJump",
+              "name": "Wall Jump",
+              "type": "ability",
+              "aliases": [
+                "Wall Jump"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "Statue",
+              "name": "Jizo",
+              "type": "capture",
+              "aliases": [
+                "Jizo",
+                "StatueJizo"
+              ]
+            },
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            },
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            },
+            {
+              "token": "NeutralThrow",
+              "name": "Neutral Throw",
+              "type": "ability",
+              "aliases": [
+                "Neutral Throw"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "Statue",
+              "name": "Jizo",
+              "type": "capture",
+              "aliases": [
+                "Jizo",
+                "StatueJizo"
+              ]
+            },
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            },
+            {
+              "token": "LedgeGrab",
+              "name": "Ledge Grab",
+              "type": "ability",
+              "aliases": [
+                "Ledge Grab"
+              ]
+            },
+            {
+              "token": "NeutralThrow",
+              "name": "Neutral Throw",
+              "type": "ability",
+              "aliases": [
+                "Neutral Throw"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Bowser's:Outfit",
+      "loading_zone_name": "SkyWorldCostumeStage",
+      "in_game_name": "Scene in the Folding Screen",
+      "kingdom": "Bowser's Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Bowser's:Shop",
+      "loading_zone_name": "SkyWorldShopStage",
+      "in_game_name": "Crazy Cap Store",
+      "kingdom": "Bowser's Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Bowser's:Spinning Tower",
+      "loading_zone_name": "TsukkunRotateExStage",
+      "in_game_name": "Spinning Tower",
+      "kingdom": "Bowser's Kingdom",
+      "captures_needed": [
+        "Pokio"
+      ],
+      "abilities_needed": [
+        "Ground Pound",
+        "Roll",
+        "Roll Boost",
+        "Triple Jump",
+        "Vault",
+        "Dive",
+        "Wall Jump",
+        "Neutral Throw"
+      ],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "GroundPound",
+              "name": "Ground Pound",
+              "type": "ability",
+              "aliases": [
+                "Ground Pound"
+              ]
+            }
+          ]
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Tsukkun",
+              "name": "Pokio",
+              "type": "capture",
+              "aliases": [
+                "Pokio"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "expert",
+          "tokens": [
+            {
+              "token": "GroundPound",
+              "name": "Ground Pound",
+              "type": "ability",
+              "aliases": [
+                "Ground Pound"
+              ]
+            },
+            {
+              "token": "Roll",
+              "name": "Roll",
+              "type": "ability",
+              "aliases": [
+                "Roll"
+              ]
+            },
+            {
+              "token": "RollBoost",
+              "name": "Roll Boost",
+              "type": "ability",
+              "aliases": [
+                "Roll Boost"
+              ]
+            },
+            {
+              "token": "TripleJump",
+              "name": "Triple Jump",
+              "type": "ability",
+              "aliases": [
+                "Triple Jump"
+              ]
+            },
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            },
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            },
+            {
+              "token": "WallJump",
+              "name": "Wall Jump",
+              "type": "ability",
+              "aliases": [
+                "Wall Jump"
+              ]
+            },
+            {
+              "token": "NeutralThrow",
+              "name": "Neutral Throw",
+              "type": "ability",
+              "aliases": [
+                "Neutral Throw"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Bowser's:Treasure Room",
+      "loading_zone_name": "SkyWorldTreasureStage",
+      "in_game_name": "Bowser's Kingdom Treasure Vault",
+      "kingdom": "Bowser's Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Bowser's:Vine Clouds",
+      "loading_zone_name": "SkyWorldCloudBonusExStage",
+      "in_game_name": "Dashing Above the Clouds",
+      "kingdom": "Bowser's Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "impossible",
+              "name": "Impossible",
+              "type": "constant",
+              "aliases": [
+                "unreachable"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Bowser's:Wooden Tower",
+      "loading_zone_name": "TsukkunClimbExStage",
+      "in_game_name": "Wooden Tower",
+      "kingdom": "Bowser's Kingdom",
+      "captures_needed": [
+        "Pokio"
+      ],
+      "abilities_needed": [
+        "Backflip",
+        "Vault",
+        "Dive",
+        "Wall Jump",
+        "Neutral Throw"
+      ],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Tsukkun",
+              "name": "Pokio",
+              "type": "capture",
+              "aliases": [
+                "Pokio"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "expert",
+          "tokens": [
+            {
+              "token": "Backflip",
+              "name": "Backflip",
+              "type": "ability",
+              "aliases": [
+                "Backflip"
+              ]
+            },
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            },
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            },
+            {
+              "token": "WallJump",
+              "name": "Wall Jump",
+              "type": "ability",
+              "aliases": [
+                "Wall Jump"
+              ]
+            },
+            {
+              "token": "NeutralThrow",
+              "name": "Neutral Throw",
+              "type": "ability",
+              "aliases": [
+                "Neutral Throw"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Cap:Frog",
+      "loading_zone_name": "FrogSearchExStage",
+      "in_game_name": "Frog Pond",
+      "kingdom": "Cap Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Cap:Orange",
+      "loading_zone_name": "PushBlockExStage",
+      "in_game_name": "Push Block Peril",
+      "kingdom": "Cap Kingdom",
+      "captures_needed": [
+        "Spark Pylon"
+      ],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "ElectricWire",
+              "name": "Spark Pylon",
+              "type": "capture",
+              "aliases": [
+                "Spark Pylon",
+                "ElectricWireMover"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Cap:Paragoomba",
+      "loading_zone_name": "PoisonWaveExStage",
+      "in_game_name": "Poison Tides",
+      "kingdom": "Cap Kingdom",
+      "captures_needed": [
+        "Paragoomba"
+      ],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "KuriboWing",
+              "name": "Paragoomba",
+              "type": "capture",
+              "aliases": [
+                "Paragoomba"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Cap:Rolling On",
+      "loading_zone_name": "RollingExStage",
+      "in_game_name": "Precision Rolling",
+      "kingdom": "Cap Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "impossible",
+              "name": "Impossible",
+              "type": "constant",
+              "aliases": [
+                "unreachable"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Cascade:2D",
+      "loading_zone_name": "Lift2DExStage",
+      "in_game_name": "8-Bit Chasm Lifts",
+      "kingdom": "Cascade Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Cascade:Chain Chomp",
+      "loading_zone_name": "WanwanClashExStage",
+      "in_game_name": "Nice Shots with Chain Chomps",
+      "kingdom": "Cascade Kingdom",
+      "captures_needed": [
+        "Chain Chomp"
+      ],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Wanwan",
+              "name": "Chain Chomp",
+              "type": "capture",
+              "aliases": [
+                "Chain Chomp"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "impossible",
+              "name": "Impossible",
+              "type": "constant",
+              "aliases": [
+                "unreachable"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Cascade:Dino",
+      "loading_zone_name": "TrexPoppunExStage",
+      "in_game_name": "Dinosaur Nest",
+      "kingdom": "Cascade Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Cascade:Swings",
+      "loading_zone_name": "CapAppearExStage",
+      "in_game_name": "Mysterious Clouds",
+      "kingdom": "Cascade Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Cascade:Windy",
+      "loading_zone_name": "WindBlowExStage",
+      "in_game_name": "Gusty Bridges",
+      "kingdom": "Cascade Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "impossible",
+              "name": "Impossible",
+              "type": "constant",
+              "aliases": [
+                "unreachable"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Cloud:2D Cube",
+      "loading_zone_name": "Cube2DExStage",
+      "in_game_name": "2D Cube",
+      "kingdom": "Cloud Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Cloud:Picture Match",
+      "loading_zone_name": "FukuwaraiKuriboStage",
+      "in_game_name": "Picture Match",
+      "kingdom": "Cloud Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Darkerside:End",
+      "loading_zone_name": "Special2WorldHomeStage",
+      "in_game_name": "Darker Side",
+      "kingdom": "Darker Side",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [],
+      "shares_stage_with": [
+        "kingdom:Darkerside"
+      ]
+    },
+    {
+      "map_node": "zone:Darkside:Breakdown",
+      "loading_zone_name": "KillerRoadNoCapExStage",
+      "in_game_name": "Breakdown Road Capless",
+      "kingdom": "Dark Side",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Darkside:Invisible",
+      "loading_zone_name": "PackunPoisonNoCapExStage",
+      "in_game_name": "Invisible Road Capless",
+      "kingdom": "Dark Side",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Darkside:Lava Rising",
+      "loading_zone_name": "SenobiTowerYoshiExStage",
+      "in_game_name": "Yoshi on the Sinking Island",
+      "kingdom": "Dark Side",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Darkside:Magma Swamp",
+      "loading_zone_name": "LavaWorldUpDownYoshiExStage",
+      "in_game_name": "Yoshi's Magma Swamp",
+      "kingdom": "Dark Side",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Darkside:Vanishing",
+      "loading_zone_name": "BikeSteelNoCapExStage",
+      "in_game_name": "Vanishing Road Capless",
+      "kingdom": "Dark Side",
+      "captures_needed": [],
+      "abilities_needed": [
+        "Long Jump",
+        "Roll Boost"
+      ],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "LongJump",
+              "name": "Long Jump",
+              "type": "ability",
+              "aliases": [
+                "Long Jump"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "RollBoost",
+              "name": "Roll Boost",
+              "type": "ability",
+              "aliases": [
+                "Roll Boost"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Darkside:Yoshi Siege",
+      "loading_zone_name": "ShootingCityYoshiExStage",
+      "in_game_name": "Yoshi Under Siege",
+      "kingdom": "Dark Side",
+      "captures_needed": [
+        "Taxi"
+      ],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Car",
+              "name": "Taxi",
+              "type": "capture",
+              "aliases": [
+                "Taxi"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Car",
+              "name": "Taxi",
+              "type": "capture",
+              "aliases": [
+                "Taxi"
+              ]
+            }
+          ]
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Lake:Grab Climb",
+      "loading_zone_name": "TrampolineWallCatchExStage",
+      "in_game_name": "Jump, Grab, Cling, Climb",
+      "kingdom": "Lake Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [
+        "Ledge Grab",
+        "Long Jump",
+        "Dive",
+        "Vault",
+        "Wall Jump",
+        "Triple Jump",
+        "Double Jump",
+        "Neutral Throw"
+      ],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "LedgeGrab",
+              "name": "Ledge Grab",
+              "type": "ability",
+              "aliases": [
+                "Ledge Grab"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "LongJump",
+              "name": "Long Jump",
+              "type": "ability",
+              "aliases": [
+                "Long Jump"
+              ]
+            },
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            },
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            },
+            {
+              "token": "WallJump",
+              "name": "Wall Jump",
+              "type": "ability",
+              "aliases": [
+                "Wall Jump"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "TripleJump",
+              "name": "Triple Jump",
+              "type": "ability",
+              "aliases": [
+                "Triple Jump"
+              ]
+            },
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            },
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "DoubleJump",
+              "name": "Double Jump",
+              "type": "ability",
+              "aliases": [
+                "Double Jump"
+              ]
+            },
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            },
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            },
+            {
+              "token": "WallJump",
+              "name": "Wall Jump",
+              "type": "ability",
+              "aliases": [
+                "Wall Jump"
+              ]
+            },
+            {
+              "token": "NeutralThrow",
+              "name": "Neutral Throw",
+              "type": "ability",
+              "aliases": [
+                "Neutral Throw"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "impossible",
+              "name": "Impossible",
+              "type": "constant",
+              "aliases": [
+                "unreachable"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Lake:Poison Waves",
+      "loading_zone_name": "FrogPoisonExStage",
+      "in_game_name": "Waves of Poison",
+      "kingdom": "Lake Kingdom",
+      "captures_needed": [
+        "Frog"
+      ],
+      "abilities_needed": [
+        "Neutral Throw",
+        "Vault",
+        "Dive",
+        "Wall Jump",
+        "Spin",
+        "Triple Jump"
+      ],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "NeutralThrow",
+              "name": "Neutral Throw",
+              "type": "ability",
+              "aliases": [
+                "Neutral Throw"
+              ]
+            },
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            },
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "WallJump",
+              "name": "Wall Jump",
+              "type": "ability",
+              "aliases": [
+                "Wall Jump"
+              ]
+            },
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Frog",
+              "name": "Frog",
+              "type": "capture",
+              "aliases": [
+                "Frog"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "WallJump",
+              "name": "Wall Jump",
+              "type": "ability",
+              "aliases": [
+                "Wall Jump"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Spin",
+              "name": "Spin",
+              "type": "ability",
+              "aliases": [
+                "Spin"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "TripleJump",
+              "name": "Triple Jump",
+              "type": "ability",
+              "aliases": [
+                "Triple Jump"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Lake:Puzzle",
+      "loading_zone_name": "GotogotonExStage",
+      "in_game_name": "Puzzle Room",
+      "kingdom": "Lake Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Lake:Shop",
+      "loading_zone_name": "LakeWorldShopStage",
+      "in_game_name": "Crazy Cap Store",
+      "kingdom": "Lake Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Lake:Zipper",
+      "loading_zone_name": "FastenerExStage",
+      "in_game_name": "Unzipping the Chasm",
+      "kingdom": "Lake Kingdom",
+      "captures_needed": [
+        "Zipper"
+      ],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Fastener",
+              "name": "Zipper",
+              "type": "capture",
+              "aliases": [
+                "Zipper"
+              ]
+            }
+          ]
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Lost:Klepto",
+      "loading_zone_name": "JangoExStage",
+      "in_game_name": "Klepto 2 - Lava Boogaloo",
+      "kingdom": "Lost Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [
+        "Dive",
+        "Wall Jump"
+      ],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "WallJump",
+              "name": "Wall Jump",
+              "type": "ability",
+              "aliases": [
+                "Wall Jump"
+              ]
+            },
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Lost:Shop",
+      "loading_zone_name": "ClashWorldShopStage",
+      "in_game_name": "Crazy Cap Store",
+      "kingdom": "Lost Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Lost:Wiggler",
+      "loading_zone_name": "ImomuPoisonExStage",
+      "in_game_name": "Stretch and Traverse the Jungle",
+      "kingdom": "Lost Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "impossible",
+              "name": "Impossible",
+              "type": "constant",
+              "aliases": [
+                "unreachable"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Luncheon:Cheese Rocks",
+      "loading_zone_name": "LavaWorldExcavationExStage",
+      "in_game_name": "Shards in the Cheese Rocks",
+      "kingdom": "Luncheon Kingdom",
+      "captures_needed": [
+        "Hammer Bro"
+      ],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "HammerBros",
+              "name": "Hammer Bro",
+              "type": "capture",
+              "aliases": [
+                "Hammer Bro"
+              ]
+            }
+          ]
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Luncheon:Forks",
+      "loading_zone_name": "ForkExStage",
+      "in_game_name": "Fork-Flickin to the Summit",
+      "kingdom": "Luncheon Kingdom",
+      "captures_needed": [
+        "Volbonan"
+      ],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "HackFork",
+              "name": "Volbonan",
+              "type": "capture",
+              "aliases": [
+                "Volbonan"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Luncheon:Gears",
+      "loading_zone_name": "GabuzouClockExStage",
+      "in_game_name": "Blazing Above the Gears",
+      "kingdom": "Luncheon Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Luncheon:Lava Islands",
+      "loading_zone_name": "LavaWorldFenceLiftExStage",
+      "in_game_name": "Lava Island Fly-By",
+      "kingdom": "Luncheon Kingdom",
+      "captures_needed": [
+        "Lava Bubble"
+      ],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Bubble",
+              "name": "Lava Bubble",
+              "type": "capture",
+              "aliases": [
+                "Lava Bubble",
+                "LavaBubble"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "impossible",
+              "name": "Impossible",
+              "type": "constant",
+              "aliases": [
+                "unreachable"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Luncheon:Magma Path",
+      "loading_zone_name": "LavaWorldBubbleLaneExStage",
+      "in_game_name": "Narrow Magma Path",
+      "kingdom": "Luncheon Kingdom",
+      "captures_needed": [
+        "Lava Bubble"
+      ],
+      "abilities_needed": [
+        "Vault",
+        "Dive",
+        "Neutral Throw"
+      ],
+      "getting_to_the_zone": [],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Bubble",
+              "name": "Lava Bubble",
+              "type": "capture",
+              "aliases": [
+                "Lava Bubble",
+                "LavaBubble"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            },
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            },
+            {
+              "token": "NeutralThrow",
+              "name": "Neutral Throw",
+              "type": "ability",
+              "aliases": [
+                "Neutral Throw"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Luncheon:Magma Swamp",
+      "loading_zone_name": "LavaWorldUpDownExStage",
+      "in_game_name": "Magma Swamp",
+      "kingdom": "Luncheon Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Luncheon:Outfit",
+      "loading_zone_name": "LavaWorldCostumeStage",
+      "in_game_name": "Simmering in the Kitchen",
+      "kingdom": "Luncheon Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Luncheon:Shop",
+      "loading_zone_name": "LavaWorldShopStage",
+      "in_game_name": "Crazy Cap Store(?)",
+      "kingdom": "Luncheon Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Luncheon:Slots",
+      "loading_zone_name": "LavaBonus1Zone",
+      "in_game_name": "Luncheon Kingdom Slots(?)",
+      "kingdom": "Luncheon Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Luncheon:Spinning Athletics",
+      "loading_zone_name": "LavaWorldClockExStage",
+      "in_game_name": "Spinning Athletics",
+      "kingdom": "Luncheon Kingdom",
+      "captures_needed": [
+        "Lava Bubble"
+      ],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Bubble",
+              "name": "Lava Bubble",
+              "type": "capture",
+              "aliases": [
+                "Lava Bubble",
+                "LavaBubble"
+              ]
+            }
+          ]
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Luncheon:Veggie Room",
+      "loading_zone_name": "LavaWorldTreasureStage",
+      "in_game_name": "Luncheon Treasure Vault(?)",
+      "kingdom": "Luncheon Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Luncheon:Volcano Cave",
+      "loading_zone_name": "CapAppearLavaLiftExStage",
+      "in_game_name": "Volcano Cave Cruising",
+      "kingdom": "Luncheon Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [
+        "Vault",
+        "Wall Jump",
+        "Neutral Throw"
+      ],
+      "getting_to_the_zone": [],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            },
+            {
+              "token": "WallJump",
+              "name": "Wall Jump",
+              "type": "ability",
+              "aliases": [
+                "Wall Jump"
+              ]
+            },
+            {
+              "token": "NeutralThrow",
+              "name": "Neutral Throw",
+              "type": "ability",
+              "aliases": [
+                "Neutral Throw"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Metro:2D",
+      "loading_zone_name": "Theater2DExStage",
+      "in_game_name": "On the Big Screen",
+      "kingdom": "Metro Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Metro:Bullet Billding",
+      "loading_zone_name": "PoleKillerExStage",
+      "in_game_name": "Bullet Billding",
+      "kingdom": "Metro Kingdom",
+      "captures_needed": [
+        "Bullet Bill"
+      ],
+      "abilities_needed": [
+        "Climb",
+        "Dive",
+        "Vault",
+        "Neutral Throw",
+        "Wall Jump",
+        "Ledge Grab",
+        "Backflip",
+        "Ground Pound Jump",
+        "Spin",
+        "Up Throw"
+      ],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Climb",
+              "name": "Climb",
+              "type": "ability",
+              "aliases": [
+                "Climb"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            },
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            },
+            {
+              "token": "NeutralThrow",
+              "name": "Neutral Throw",
+              "type": "ability",
+              "aliases": [
+                "Neutral Throw"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "expert",
+          "tokens": [
+            {
+              "token": "WallJump",
+              "name": "Wall Jump",
+              "type": "ability",
+              "aliases": [
+                "Wall Jump"
+              ]
+            },
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            },
+            {
+              "token": "NeutralThrow",
+              "name": "Neutral Throw",
+              "type": "ability",
+              "aliases": [
+                "Neutral Throw"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "WallJump",
+              "name": "Wall Jump",
+              "type": "ability",
+              "aliases": [
+                "Wall Jump"
+              ]
+            },
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            },
+            {
+              "token": "NeutralThrow",
+              "name": "Neutral Throw",
+              "type": "ability",
+              "aliases": [
+                "Neutral Throw"
+              ]
+            },
+            {
+              "token": "Killer",
+              "name": "Bullet Bill",
+              "type": "capture",
+              "aliases": [
+                "Bullet Bill"
+              ]
+            },
+            {
+              "token": "LedgeGrab",
+              "name": "Ledge Grab",
+              "type": "ability",
+              "aliases": [
+                "Ledge Grab"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "expert",
+          "tokens": [
+            {
+              "token": "Backflip",
+              "name": "Backflip",
+              "type": "ability",
+              "aliases": [
+                "Backflip"
+              ]
+            },
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "expert",
+          "tokens": [
+            {
+              "token": "GroundPoundJump",
+              "name": "Ground Pound Jump",
+              "type": "ability",
+              "aliases": [
+                "Ground Pound Jump"
+              ]
+            },
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "expert",
+          "tokens": [
+            {
+              "token": "Spin",
+              "name": "Spin",
+              "type": "ability",
+              "aliases": [
+                "Spin"
+              ]
+            },
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "expert",
+          "tokens": [
+            {
+              "token": "Backflip",
+              "name": "Backflip",
+              "type": "ability",
+              "aliases": [
+                "Backflip"
+              ]
+            },
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            },
+            {
+              "token": "NeutralThrow",
+              "name": "Neutral Throw",
+              "type": "ability",
+              "aliases": [
+                "Neutral Throw"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "expert",
+          "tokens": [
+            {
+              "token": "GroundPoundJump",
+              "name": "Ground Pound Jump",
+              "type": "ability",
+              "aliases": [
+                "Ground Pound Jump"
+              ]
+            },
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            },
+            {
+              "token": "NeutralThrow",
+              "name": "Neutral Throw",
+              "type": "ability",
+              "aliases": [
+                "Neutral Throw"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "expert",
+          "tokens": [
+            {
+              "token": "Spin",
+              "name": "Spin",
+              "type": "ability",
+              "aliases": [
+                "Spin"
+              ]
+            },
+            {
+              "token": "UpThrow",
+              "name": "Up Throw",
+              "type": "ability",
+              "aliases": [
+                "Up Throw"
+              ]
+            },
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Metro:Dark",
+      "loading_zone_name": "DonsukeExStage",
+      "in_game_name": "Pitchblack Mountain",
+      "kingdom": "Metro Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Metro:Dino",
+      "loading_zone_name": "TrexBikeExStage",
+      "in_game_name": "Scooter Escape!",
+      "kingdom": "Metro Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "impossible",
+              "name": "Impossible",
+              "type": "constant",
+              "aliases": [
+                "unreachable"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Metro:Notes",
+      "loading_zone_name": "Note2D3DRoomExStage",
+      "in_game_name": "Rainbow Notes",
+      "kingdom": "Metro Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Metro:Outfit",
+      "loading_zone_name": "ElectricWireExStage",
+      "in_game_name": "Rewiring the Neighborhood",
+      "kingdom": "Metro Kingdom",
+      "captures_needed": [
+        "Spark Pylon"
+      ],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "ElectricWire",
+              "name": "Spark Pylon",
+              "type": "capture",
+              "aliases": [
+                "Spark Pylon",
+                "ElectricWireMover"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Metro:People",
+      "loading_zone_name": "CityPeopleRoadStage",
+      "in_game_name": "Crowded Alleyway",
+      "kingdom": "Metro Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Metro:Purple Shop",
+      "loading_zone_name": "CityWorldShop01Stage",
+      "in_game_name": "Crazy Cap Store",
+      "kingdom": "Metro Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": [
+        "zone:Metro:Yellow Shop"
+      ]
+    },
+    {
+      "map_node": "zone:Metro:RC Car",
+      "loading_zone_name": "RadioControlExStage",
+      "in_game_name": "RC Race",
+      "kingdom": "Metro Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Metro:Rocket",
+      "loading_zone_name": "PoleGrabCeilExStage",
+      "in_game_name": "Swinging Along the High-Rises",
+      "kingdom": "Metro Kingdom",
+      "captures_needed": [
+        "Mini Rocket"
+      ],
+      "abilities_needed": [
+        "Long Jump"
+      ],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "BazookaElectric",
+              "name": "Mini Rocket",
+              "type": "capture",
+              "aliases": [
+                "Mini Rocket"
+              ]
+            },
+            {
+              "token": "LongJump",
+              "name": "Long Jump",
+              "type": "ability",
+              "aliases": [
+                "Long Jump"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "BazookaElectric",
+              "name": "Mini Rocket",
+              "type": "capture",
+              "aliases": [
+                "Mini Rocket"
+              ]
+            }
+          ]
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Metro:Rotating Maze",
+      "loading_zone_name": "CapRotatePackunExStage",
+      "in_game_name": "Rotating Maze Shards",
+      "kingdom": "Metro Kingdom",
+      "captures_needed": [
+        "Manhole"
+      ],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Manhole",
+              "name": "Manhole",
+              "type": "capture",
+              "aliases": [
+                "Manhole"
+              ]
+            }
+          ]
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Metro:Scaffolding",
+      "loading_zone_name": "SwingSteelExStage",
+      "in_game_name": "Swinging Scaffolding",
+      "kingdom": "Metro Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Metro:Scooter",
+      "loading_zone_name": "BikeSteelExStage",
+      "in_game_name": "Scooter Daredevil",
+      "kingdom": "Metro Kingdom",
+      "captures_needed": [
+        "Pole",
+        "Spark Pylon"
+      ],
+      "abilities_needed": [
+        "Wall Jump",
+        "Dive",
+        "Neutral Throw",
+        "Vault",
+        "Ledge Grab"
+      ],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "WallJump",
+              "name": "Wall Jump",
+              "type": "ability",
+              "aliases": [
+                "Wall Jump"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Guidepost",
+              "name": "Pole",
+              "type": "capture",
+              "aliases": [
+                "Pole"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "NeutralThrow",
+              "name": "Neutral Throw",
+              "type": "ability",
+              "aliases": [
+                "Neutral Throw"
+              ]
+            },
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "WallJump",
+              "name": "Wall Jump",
+              "type": "ability",
+              "aliases": [
+                "Wall Jump"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "LedgeGrab",
+              "name": "Ledge Grab",
+              "type": "ability",
+              "aliases": [
+                "Ledge Grab"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "ElectricWire",
+              "name": "Spark Pylon",
+              "type": "capture",
+              "aliases": [
+                "Spark Pylon",
+                "ElectricWireMover"
+              ]
+            }
+          ]
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "impossible",
+              "name": "Impossible",
+              "type": "constant",
+              "aliases": [
+                "unreachable"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Metro:Slots",
+      "loading_zone_name": "CityWorldSandSlotStage",
+      "in_game_name": "Metro Kingdom Slots",
+      "kingdom": "Metro Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Metro:Taxi",
+      "loading_zone_name": "ShootingCityExStage",
+      "in_game_name": "Shards Under Siege",
+      "kingdom": "Metro Kingdom",
+      "captures_needed": [
+        "Taxi"
+      ],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Car",
+              "name": "Taxi",
+              "type": "capture",
+              "aliases": [
+                "Taxi"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Car",
+              "name": "Taxi",
+              "type": "capture",
+              "aliases": [
+                "Taxi"
+              ]
+            }
+          ]
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Car",
+              "name": "Taxi",
+              "type": "capture",
+              "aliases": [
+                "Taxi"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Car",
+              "name": "Taxi",
+              "type": "capture",
+              "aliases": [
+                "Taxi"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Car",
+              "name": "Taxi",
+              "type": "capture",
+              "aliases": [
+                "Taxi"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Metro:Yellow Shop",
+      "loading_zone_name": "CityWorldShop01Stage",
+      "in_game_name": "Crazy Cap Store",
+      "kingdom": "Metro Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": [
+        "zone:Metro:Purple Shop"
+      ]
+    },
+    {
+      "map_node": "zone:Moon:2D Snowman",
+      "loading_zone_name": "Galaxy2DExStage",
+      "in_game_name": "8-Bit Galaxy",
+      "kingdom": "Moon Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Moon:Shop",
+      "loading_zone_name": "MoonWorldShopRoom",
+      "in_game_name": "Crazy Cap Store",
+      "kingdom": "Moon Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Moon:Sphynx",
+      "loading_zone_name": "MoonWorldSphinxRoom",
+      "in_game_name": "Moon Kingdom Treasure Vault",
+      "kingdom": "Moon Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Moon:Swings",
+      "loading_zone_name": "MoonAthleticExStage",
+      "in_game_name": "Giant Swings",
+      "kingdom": "Moon Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [
+        "Wall Jump",
+        "Triple Jump",
+        "Vault",
+        "Dive",
+        "Neutral Throw",
+        "Ground Pound",
+        "Roll Boost"
+      ],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "WallJump",
+              "name": "Wall Jump",
+              "type": "ability",
+              "aliases": [
+                "Wall Jump"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "TripleJump",
+              "name": "Triple Jump",
+              "type": "ability",
+              "aliases": [
+                "Triple Jump"
+              ]
+            },
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            },
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            },
+            {
+              "token": "NeutralThrow",
+              "name": "Neutral Throw",
+              "type": "ability",
+              "aliases": [
+                "Neutral Throw"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "GroundPound",
+              "name": "Ground Pound",
+              "type": "ability",
+              "aliases": [
+                "Ground Pound"
+              ]
+            },
+            {
+              "token": "RollBoost",
+              "name": "Roll Boost",
+              "type": "ability",
+              "aliases": [
+                "Roll Boost"
+              ]
+            },
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            },
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            },
+            {
+              "token": "NeutralThrow",
+              "name": "Neutral Throw",
+              "type": "ability",
+              "aliases": [
+                "Neutral Throw"
+              ]
+            }
+          ]
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Mushroom:Castle Door",
+      "loading_zone_name": "PeachWorldCastleStage",
+      "in_game_name": "Peach's Castle",
+      "kingdom": "Mushroom Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Mushroom:Cloud Sea",
+      "loading_zone_name": "YoshiCloudExStage",
+      "in_game_name": "Yoshi in the Sea of Clouds",
+      "kingdom": "Mushroom Kingdom",
+      "captures_needed": [
+        "Yoshi"
+      ],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Yoshi",
+              "name": "Yoshi",
+              "type": "capture",
+              "aliases": [
+                "Yoshi",
+                "YoshiModel"
+              ]
+            }
+          ]
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Mushroom:Cookatiel",
+      "loading_zone_name": "RevengeBossMagmaStage",
+      "in_game_name": "Cookatiel Boss Re-fight",
+      "kingdom": "Mushroom Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Mushroom:Dragon",
+      "loading_zone_name": "RevengeBossRaidStage",
+      "in_game_name": "Lord of Lightning Boss Re-fight",
+      "kingdom": "Mushroom Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "impossible",
+              "name": "Impossible",
+              "type": "constant",
+              "aliases": [
+                "unreachable"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Mushroom:Knucklotec",
+      "loading_zone_name": "RevengeBossKnuckleStage",
+      "in_game_name": "Knucklotec Boss Re-fight",
+      "kingdom": "Mushroom Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Mushroom:Mechawiggler",
+      "loading_zone_name": "RevengeMofumofuStage",
+      "in_game_name": "Mechawiggler Boss Re-fight",
+      "kingdom": "Mushroom Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Mushroom:Octopus",
+      "loading_zone_name": "RevengeGiantWanderBossStage",
+      "in_game_name": "Mollusque-Lanceur Boss Re-fight",
+      "kingdom": "Mushroom Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "impossible",
+              "name": "Impossible",
+              "type": "constant",
+              "aliases": [
+                "unreachable"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Mushroom:Outfit",
+      "loading_zone_name": "PeachWorldCostumeStage",
+      "in_game_name": "Castle Courtyard 64",
+      "kingdom": "Mushroom Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Mushroom:Rocket",
+      "loading_zone_name": "FukuwaraiMarioStage",
+      "in_game_name": "Picture Match",
+      "kingdom": "Mushroom Kingdom",
+      "captures_needed": [
+        "Mini Rocket"
+      ],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "BazookaElectric",
+              "name": "Mini Rocket",
+              "type": "capture",
+              "aliases": [
+                "Mini Rocket"
+              ]
+            }
+          ]
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "BazookaElectric",
+              "name": "Mini Rocket",
+              "type": "capture",
+              "aliases": [
+                "Mini Rocket"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Mushroom:Shop",
+      "loading_zone_name": "PeachWorldShopStage",
+      "in_game_name": "Crazy Cap Store",
+      "kingdom": "Mushroom Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Mushroom:Torkdrift",
+      "loading_zone_name": "RevengeForestBossStage",
+      "in_game_name": "Torkdrift Boss Re-fight",
+      "kingdom": "Mushroom Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Mushroom:Well",
+      "loading_zone_name": "DotHardExStage",
+      "in_game_name": "8-Bit Bullet Bills",
+      "kingdom": "Mushroom Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Ruined:Chargin' Chuck",
+      "loading_zone_name": "BullRunExStage",
+      "in_game_name": "Mummy Army",
+      "kingdom": "Ruined Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [
+        "Wall Jump",
+        "Vault",
+        "Backflip",
+        "Ledge Grab",
+        "Dive",
+        "Climb",
+        "Ground Pound Jump",
+        "Side Flip",
+        "Spin",
+        "Triple Jump"
+      ],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "WallJump",
+              "name": "Wall Jump",
+              "type": "ability",
+              "aliases": [
+                "Wall Jump"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Backflip",
+              "name": "Backflip",
+              "type": "ability",
+              "aliases": [
+                "Backflip"
+              ]
+            },
+            {
+              "token": "LedgeGrab",
+              "name": "Ledge Grab",
+              "type": "ability",
+              "aliases": [
+                "Ledge Grab"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Climb",
+              "name": "Climb",
+              "type": "ability",
+              "aliases": [
+                "Climb"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "GroundPoundJump",
+              "name": "Ground Pound Jump",
+              "type": "ability",
+              "aliases": [
+                "Ground Pound Jump"
+              ]
+            },
+            {
+              "token": "LedgeGrab",
+              "name": "Ledge Grab",
+              "type": "ability",
+              "aliases": [
+                "Ledge Grab"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "SideFlip",
+              "name": "Side Flip",
+              "type": "ability",
+              "aliases": [
+                "Side Flip"
+              ]
+            },
+            {
+              "token": "LedgeGrab",
+              "name": "Ledge Grab",
+              "type": "ability",
+              "aliases": [
+                "Ledge Grab"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Spin",
+              "name": "Spin",
+              "type": "ability",
+              "aliases": [
+                "Spin"
+              ]
+            },
+            {
+              "token": "LedgeGrab",
+              "name": "Ledge Grab",
+              "type": "ability",
+              "aliases": [
+                "Ledge Grab"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "TripleJump",
+              "name": "Triple Jump",
+              "type": "ability",
+              "aliases": [
+                "Triple Jump"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Ruined:Rocket",
+      "loading_zone_name": "DotTowerExStage",
+      "in_game_name": "Roulette Tower",
+      "kingdom": "Ruined Kingdom",
+      "captures_needed": [
+        "Mini Rocket"
+      ],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "BazookaElectric",
+              "name": "Mini Rocket",
+              "type": "capture",
+              "aliases": [
+                "Mini Rocket"
+              ]
+            }
+          ]
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "BazookaElectric",
+              "name": "Mini Rocket",
+              "type": "capture",
+              "aliases": [
+                "Mini Rocket"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Sand:Bullet Bill",
+      "loading_zone_name": "SandWorldKillerExStage",
+      "in_game_name": "Bullet Bill Maze",
+      "kingdom": "Sand Kingdom",
+      "captures_needed": [
+        "Bullet Bill"
+      ],
+      "abilities_needed": [
+        "Backflip",
+        "Wall Jump",
+        "Ledge Grab",
+        "Dive",
+        "Ground Pound Jump",
+        "Side Flip",
+        "Spin",
+        "Triple Jump",
+        "Vault",
+        "Neutral Throw",
+        "Double Jump",
+        "Up Throw"
+      ],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Killer",
+              "name": "Bullet Bill",
+              "type": "capture",
+              "aliases": [
+                "Bullet Bill"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "Backflip",
+              "name": "Backflip",
+              "type": "ability",
+              "aliases": [
+                "Backflip"
+              ]
+            },
+            {
+              "token": "WallJump",
+              "name": "Wall Jump",
+              "type": "ability",
+              "aliases": [
+                "Wall Jump"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "WallJump",
+              "name": "Wall Jump",
+              "type": "ability",
+              "aliases": [
+                "Wall Jump"
+              ]
+            },
+            {
+              "token": "LedgeGrab",
+              "name": "Ledge Grab",
+              "type": "ability",
+              "aliases": [
+                "Ledge Grab"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "WallJump",
+              "name": "Wall Jump",
+              "type": "ability",
+              "aliases": [
+                "Wall Jump"
+              ]
+            },
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "GroundPoundJump",
+              "name": "Ground Pound Jump",
+              "type": "ability",
+              "aliases": [
+                "Ground Pound Jump"
+              ]
+            },
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "GroundPoundJump",
+              "name": "Ground Pound Jump",
+              "type": "ability",
+              "aliases": [
+                "Ground Pound Jump"
+              ]
+            },
+            {
+              "token": "WallJump",
+              "name": "Wall Jump",
+              "type": "ability",
+              "aliases": [
+                "Wall Jump"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "SideFlip",
+              "name": "Side Flip",
+              "type": "ability",
+              "aliases": [
+                "Side Flip"
+              ]
+            },
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "SideFlip",
+              "name": "Side Flip",
+              "type": "ability",
+              "aliases": [
+                "Side Flip"
+              ]
+            },
+            {
+              "token": "WallJump",
+              "name": "Wall Jump",
+              "type": "ability",
+              "aliases": [
+                "Wall Jump"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "Backflip",
+              "name": "Backflip",
+              "type": "ability",
+              "aliases": [
+                "Backflip"
+              ]
+            },
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "Spin",
+              "name": "Spin",
+              "type": "ability",
+              "aliases": [
+                "Spin"
+              ]
+            },
+            {
+              "token": "WallJump",
+              "name": "Wall Jump",
+              "type": "ability",
+              "aliases": [
+                "Wall Jump"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "Spin",
+              "name": "Spin",
+              "type": "ability",
+              "aliases": [
+                "Spin"
+              ]
+            },
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "TripleJump",
+              "name": "Triple Jump",
+              "type": "ability",
+              "aliases": [
+                "Triple Jump"
+              ]
+            },
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "TripleJump",
+              "name": "Triple Jump",
+              "type": "ability",
+              "aliases": [
+                "Triple Jump"
+              ]
+            },
+            {
+              "token": "WallJump",
+              "name": "Wall Jump",
+              "type": "ability",
+              "aliases": [
+                "Wall Jump"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            },
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            },
+            {
+              "token": "NeutralThrow",
+              "name": "Neutral Throw",
+              "type": "ability",
+              "aliases": [
+                "Neutral Throw"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            },
+            {
+              "token": "Backflip",
+              "name": "Backflip",
+              "type": "ability",
+              "aliases": [
+                "Backflip"
+              ]
+            },
+            {
+              "token": "NeutralThrow",
+              "name": "Neutral Throw",
+              "type": "ability",
+              "aliases": [
+                "Neutral Throw"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            },
+            {
+              "token": "SideFlip",
+              "name": "Side Flip",
+              "type": "ability",
+              "aliases": [
+                "Side Flip"
+              ]
+            },
+            {
+              "token": "NeutralThrow",
+              "name": "Neutral Throw",
+              "type": "ability",
+              "aliases": [
+                "Neutral Throw"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "DoubleJump",
+              "name": "Double Jump",
+              "type": "ability",
+              "aliases": [
+                "Double Jump"
+              ]
+            },
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            },
+            {
+              "token": "LedgeGrab",
+              "name": "Ledge Grab",
+              "type": "ability",
+              "aliases": [
+                "Ledge Grab"
+              ]
+            },
+            {
+              "token": "NeutralThrow",
+              "name": "Neutral Throw",
+              "type": "ability",
+              "aliases": [
+                "Neutral Throw"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "TripleJump",
+              "name": "Triple Jump",
+              "type": "ability",
+              "aliases": [
+                "Triple Jump"
+              ]
+            },
+            {
+              "token": "LedgeGrab",
+              "name": "Ledge Grab",
+              "type": "ability",
+              "aliases": [
+                "Ledge Grab"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "TripleJump",
+              "name": "Triple Jump",
+              "type": "ability",
+              "aliases": [
+                "Triple Jump"
+              ]
+            },
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            },
+            {
+              "token": "NeutralThrow",
+              "name": "Neutral Throw",
+              "type": "ability",
+              "aliases": [
+                "Neutral Throw"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            },
+            {
+              "token": "WallJump",
+              "name": "Wall Jump",
+              "type": "ability",
+              "aliases": [
+                "Wall Jump"
+              ]
+            },
+            {
+              "token": "NeutralThrow",
+              "name": "Neutral Throw",
+              "type": "ability",
+              "aliases": [
+                "Neutral Throw"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "UpThrow",
+              "name": "Up Throw",
+              "type": "ability",
+              "aliases": [
+                "Up Throw"
+              ]
+            },
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            },
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "UpThrow",
+              "name": "Up Throw",
+              "type": "ability",
+              "aliases": [
+                "Up Throw"
+              ]
+            },
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            },
+            {
+              "token": "Backflip",
+              "name": "Backflip",
+              "type": "ability",
+              "aliases": [
+                "Backflip"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            },
+            {
+              "token": "SideFlip",
+              "name": "Side Flip",
+              "type": "ability",
+              "aliases": [
+                "Side Flip"
+              ]
+            },
+            {
+              "token": "UpThrow",
+              "name": "Up Throw",
+              "type": "ability",
+              "aliases": [
+                "Up Throw"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "DoubleJump",
+              "name": "Double Jump",
+              "type": "ability",
+              "aliases": [
+                "Double Jump"
+              ]
+            },
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            },
+            {
+              "token": "LedgeGrab",
+              "name": "Ledge Grab",
+              "type": "ability",
+              "aliases": [
+                "Ledge Grab"
+              ]
+            },
+            {
+              "token": "UpThrow",
+              "name": "Up Throw",
+              "type": "ability",
+              "aliases": [
+                "Up Throw"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "TripleJump",
+              "name": "Triple Jump",
+              "type": "ability",
+              "aliases": [
+                "Triple Jump"
+              ]
+            },
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            },
+            {
+              "token": "UpThrow",
+              "name": "Up Throw",
+              "type": "ability",
+              "aliases": [
+                "Up Throw"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            },
+            {
+              "token": "WallJump",
+              "name": "Wall Jump",
+              "type": "ability",
+              "aliases": [
+                "Wall Jump"
+              ]
+            },
+            {
+              "token": "UpThrow",
+              "name": "Up Throw",
+              "type": "ability",
+              "aliases": [
+                "Up Throw"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Backflip",
+              "name": "Backflip",
+              "type": "ability",
+              "aliases": [
+                "Backflip"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "LedgeGrab",
+              "name": "Ledge Grab",
+              "type": "ability",
+              "aliases": [
+                "Ledge Grab"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "GroundPoundJump",
+              "name": "Ground Pound Jump",
+              "type": "ability",
+              "aliases": [
+                "Ground Pound Jump"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "SideFlip",
+              "name": "Side Flip",
+              "type": "ability",
+              "aliases": [
+                "Side Flip"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Spin",
+              "name": "Spin",
+              "type": "ability",
+              "aliases": [
+                "Spin"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "TripleJump",
+              "name": "Triple Jump",
+              "type": "ability",
+              "aliases": [
+                "Triple Jump"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "WallJump",
+              "name": "Wall Jump",
+              "type": "ability",
+              "aliases": [
+                "Wall Jump"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Sand:Colossal Ruins",
+      "loading_zone_name": "RocketFlowerExStage",
+      "in_game_name": "Colossal Ruins",
+      "kingdom": "Sand Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Sand:Employees",
+      "loading_zone_name": "SandWorldShopStage",
+      "in_game_name": "Crazy Cap Store",
+      "kingdom": "Sand Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [
+        "Crouch"
+      ],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Crouch",
+              "name": "Crouch",
+              "type": "ability",
+              "aliases": [
+                "Crouch"
+              ]
+            }
+          ]
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "impossible",
+              "name": "Impossible",
+              "type": "constant",
+              "aliases": [
+                "unreachable"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "impossible",
+              "name": "Impossible",
+              "type": "constant",
+              "aliases": [
+                "unreachable"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": [
+        "zone:Sand:Shop"
+      ]
+    },
+    {
+      "map_node": "zone:Sand:Gushen",
+      "loading_zone_name": "WaterTubeExStage",
+      "in_game_name": "Freezing Waterway",
+      "kingdom": "Sand Kingdom",
+      "captures_needed": [
+        "Gushen"
+      ],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Hosui",
+              "name": "Gushen",
+              "type": "capture",
+              "aliases": [
+                "Gushen"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "impossible",
+              "name": "Impossible",
+              "type": "constant",
+              "aliases": [
+                "unreachable"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Sand:Icy Cave",
+      "loading_zone_name": "SandWorldPressExStage",
+      "in_game_name": "Ice Cave",
+      "kingdom": "Sand Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Sand:Jaxi Ruins",
+      "loading_zone_name": "SandWorldSphinxExStage",
+      "in_game_name": "Jaxi Driving",
+      "kingdom": "Sand Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "impossible",
+              "name": "Impossible",
+              "type": "constant",
+              "aliases": [
+                "unreachable"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "impossible",
+              "name": "Impossible",
+              "type": "constant",
+              "aliases": [
+                "unreachable"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "impossible",
+              "name": "Impossible",
+              "type": "constant",
+              "aliases": [
+                "unreachable"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Sand:Moe-eye",
+      "loading_zone_name": "SandWorldMeganeExStage",
+      "in_game_name": "Transparent Lifts",
+      "kingdom": "Sand Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "impossible",
+              "name": "Impossible",
+              "type": "constant",
+              "aliases": [
+                "unreachable"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Sand:Moving Platform",
+      "loading_zone_name": "MeganeLiftExStage",
+      "in_game_name": "The Invisible Maze",
+      "kingdom": "Sand Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "expert",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Sand:Outfit",
+      "loading_zone_name": "SandWorldCostumeStage",
+      "in_game_name": "Costume Room",
+      "kingdom": "Sand Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Sand:Rocket",
+      "loading_zone_name": "SandWorldRotateExStage",
+      "in_game_name": "Strange Neighborhood",
+      "kingdom": "Sand Kingdom",
+      "captures_needed": [
+        "Mini Rocket"
+      ],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "BazookaElectric",
+              "name": "Mini Rocket",
+              "type": "capture",
+              "aliases": [
+                "Mini Rocket"
+              ]
+            }
+          ]
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "BazookaElectric",
+              "name": "Mini Rocket",
+              "type": "capture",
+              "aliases": [
+                "Mini Rocket"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "BazookaElectric",
+              "name": "Mini Rocket",
+              "type": "capture",
+              "aliases": [
+                "Mini Rocket"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Sand:Rumble",
+      "loading_zone_name": "SandWorldVibrationStage",
+      "in_game_name": "Rumbling Floor House",
+      "kingdom": "Sand Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Sand:Shop",
+      "loading_zone_name": "SandWorldShopStage",
+      "in_game_name": "Crazy Cap Store",
+      "kingdom": "Sand Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [
+        "Crouch"
+      ],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Crouch",
+              "name": "Crouch",
+              "type": "ability",
+              "aliases": [
+                "Crouch"
+              ]
+            }
+          ]
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "impossible",
+              "name": "Impossible",
+              "type": "constant",
+              "aliases": [
+                "unreachable"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "impossible",
+              "name": "Impossible",
+              "type": "constant",
+              "aliases": [
+                "unreachable"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": [
+        "zone:Sand:Employees"
+      ]
+    },
+    {
+      "map_node": "zone:Sand:Slots",
+      "loading_zone_name": "SandWorldSlotStage",
+      "in_game_name": "Tostarena Slots",
+      "kingdom": "Sand Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Sand:Sphynx",
+      "loading_zone_name": "SandWorldSecretStage",
+      "in_game_name": "Sphynx Treasure Vault",
+      "kingdom": "Sand Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Seaside:Gushen",
+      "loading_zone_name": "WaterValleyExStage",
+      "in_game_name": "Flying Through the Narrow Valley",
+      "kingdom": "Seaside Kingdom",
+      "captures_needed": [
+        "Gushen"
+      ],
+      "abilities_needed": [
+        "Wall Jump",
+        "Ground Pound Jump",
+        "Vault",
+        "Dive",
+        "Neutral Throw",
+        "Backflip",
+        "Side Flip",
+        "Up Throw"
+      ],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Hosui",
+              "name": "Gushen",
+              "type": "capture",
+              "aliases": [
+                "Gushen"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Hosui",
+              "name": "Gushen",
+              "type": "capture",
+              "aliases": [
+                "Gushen"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "WallJump",
+              "name": "Wall Jump",
+              "type": "ability",
+              "aliases": [
+                "Wall Jump"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "GroundPoundJump",
+              "name": "Ground Pound Jump",
+              "type": "ability",
+              "aliases": [
+                "Ground Pound Jump"
+              ]
+            },
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            },
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            },
+            {
+              "token": "NeutralThrow",
+              "name": "Neutral Throw",
+              "type": "ability",
+              "aliases": [
+                "Neutral Throw"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "Backflip",
+              "name": "Backflip",
+              "type": "ability",
+              "aliases": [
+                "Backflip"
+              ]
+            },
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            },
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            },
+            {
+              "token": "NeutralThrow",
+              "name": "Neutral Throw",
+              "type": "ability",
+              "aliases": [
+                "Neutral Throw"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "SideFlip",
+              "name": "Side Flip",
+              "type": "ability",
+              "aliases": [
+                "Side Flip"
+              ]
+            },
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            },
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            },
+            {
+              "token": "NeutralThrow",
+              "name": "Neutral Throw",
+              "type": "ability",
+              "aliases": [
+                "Neutral Throw"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "expert",
+          "tokens": [
+            {
+              "token": "GroundPoundJump",
+              "name": "Ground Pound Jump",
+              "type": "ability",
+              "aliases": [
+                "Ground Pound Jump"
+              ]
+            },
+            {
+              "token": "UpThrow",
+              "name": "Up Throw",
+              "type": "ability",
+              "aliases": [
+                "Up Throw"
+              ]
+            },
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            },
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            }
+          ]
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Hosui",
+              "name": "Gushen",
+              "type": "capture",
+              "aliases": [
+                "Gushen"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "impossible",
+              "name": "Impossible",
+              "type": "constant",
+              "aliases": [
+                "unreachable"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Seaside:Lava Rising",
+      "loading_zone_name": "SenobiTowerExStage",
+      "in_game_name": "Stretching Up the Sinking Island",
+      "kingdom": "Seaside Kingdom",
+      "captures_needed": [
+        "Uproot"
+      ],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Senobi",
+              "name": "Uproot",
+              "type": "capture",
+              "aliases": [
+                "Uproot"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "impossible",
+              "name": "Impossible",
+              "type": "constant",
+              "aliases": [
+                "unreachable"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Seaside:Outfit",
+      "loading_zone_name": "SeaWorldCostumeStage",
+      "in_game_name": "Costume Room",
+      "kingdom": "Seaside Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Seaside:Pokio",
+      "loading_zone_name": "ReflectBombExStage",
+      "in_game_name": "Stop, Poke, and Roll",
+      "kingdom": "Seaside Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "impossible",
+              "name": "Impossible",
+              "type": "constant",
+              "aliases": [
+                "unreachable"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Seaside:Rocket",
+      "loading_zone_name": "CloudExStage",
+      "in_game_name": "A Sea of Clouds",
+      "kingdom": "Seaside Kingdom",
+      "captures_needed": [
+        "Mini Rocket"
+      ],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "BazookaElectric",
+              "name": "Mini Rocket",
+              "type": "capture",
+              "aliases": [
+                "Mini Rocket"
+              ]
+            }
+          ]
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "BazookaElectric",
+              "name": "Mini Rocket",
+              "type": "capture",
+              "aliases": [
+                "Mini Rocket"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "BazookaElectric",
+              "name": "Mini Rocket",
+              "type": "capture",
+              "aliases": [
+                "Mini Rocket"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Seaside:Rumble",
+      "loading_zone_name": "SeaWorldVibrationStage",
+      "in_game_name": "Rumbling Floor Cave",
+      "kingdom": "Seaside Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Seaside:Sandy Bottom",
+      "loading_zone_name": "SeaWorldSneakingManStage",
+      "in_game_name": "Wriggling Power Moon",
+      "kingdom": "Seaside Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Seaside:Sphynx",
+      "loading_zone_name": "SeaWorldSecretStage",
+      "in_game_name": "Sphynx Treasure Vault",
+      "kingdom": "Seaside Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Seaside:Spinning Maze",
+      "loading_zone_name": "TogezoRotateExStage",
+      "in_game_name": "Spinning Maze",
+      "kingdom": "Seaside Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Seaside:Well Enter",
+      "loading_zone_name": "SeaWorldUtsuboCaveStage",
+      "in_game_name": "Underwater Tunnel",
+      "kingdom": "Seaside Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Seaside:Well Exit",
+      "loading_zone_name": "SeaWorldHomeStage",
+      "in_game_name": "Seaside Kingdom",
+      "kingdom": "Seaside Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [],
+      "shares_stage_with": [
+        "kingdom:Seaside"
+      ]
+    },
+    {
+      "map_node": "zone:Snow:Capless",
+      "loading_zone_name": "IceWaterBlockExStage",
+      "in_game_name": "Freezing Water",
+      "kingdom": "Snow Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Snow:Clouds",
+      "loading_zone_name": "SnowWorldCloudBonusExStage",
+      "in_game_name": "Spinning Above the Clouds",
+      "kingdom": "Snow Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [
+        "Climb"
+      ],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Climb",
+              "name": "Climb",
+              "type": "ability",
+              "aliases": [
+                "Climb"
+              ]
+            }
+          ]
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Snow:Flower Road",
+      "loading_zone_name": "KillerRailCollisionExStage",
+      "in_game_name": "Wintery Flower Road",
+      "kingdom": "Snow Kingdom",
+      "captures_needed": [
+        "Banzai Bill"
+      ],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "KillerMagnum",
+              "name": "Banzai Bill",
+              "type": "capture",
+              "aliases": [
+                "Banzai Bill"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Snow:Iceburn",
+      "loading_zone_name": "SnowWorldLobby001Stage",
+      "in_game_name": "SnowWorldLobby001Stage",
+      "kingdom": "Snow Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Snow:Outfit",
+      "loading_zone_name": "SnowWorldCostumeStage",
+      "in_game_name": "Cold Room",
+      "kingdom": "Snow Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Snow:Puzzle",
+      "loading_zone_name": "ByugoPuzzleExStage",
+      "in_game_name": "Ty-Foo Sliding Puzzle",
+      "kingdom": "Snow Kingdom",
+      "captures_needed": [
+        "Ty-foo"
+      ],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Byugo",
+              "name": "Ty-foo",
+              "type": "capture",
+              "aliases": [
+                "Ty-foo"
+              ]
+            }
+          ]
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Snow:Rocket Flower",
+      "loading_zone_name": "IceWaterDashExStage",
+      "in_game_name": "Dashing Over Cold Water",
+      "kingdom": "Snow Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Snow:Shop",
+      "loading_zone_name": "SnowWorldShopStage",
+      "in_game_name": "Crazy Cap Store",
+      "kingdom": "Snow Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Snow:Tracewalking",
+      "loading_zone_name": "IceWalkerExStage",
+      "in_game_name": "Shards in the Cold Room",
+      "kingdom": "Snow Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Wooded:Breakdown",
+      "loading_zone_name": "KillerRoadExStage",
+      "in_game_name": "Breakdown Road",
+      "kingdom": "Wooded Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Wooded:DW Odyssey",
+      "loading_zone_name": "ForestWorldHomeStage",
+      "in_game_name": "Wooded Kingdom",
+      "kingdom": "Wooded Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [],
+      "shares_stage_with": [
+        "kingdom:Wooded",
+        "zone:Wooded:DW Pond"
+      ]
+    },
+    {
+      "map_node": "zone:Wooded:DW Outfit",
+      "loading_zone_name": "ForestWorldWoodsCostumeStage",
+      "in_game_name": "Costume Room",
+      "kingdom": "Wooded Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Wooded:DW Pond",
+      "loading_zone_name": "ForestWorldHomeStage",
+      "in_game_name": "Wooded Kingdom",
+      "kingdom": "Wooded Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [],
+      "shares_stage_with": [
+        "kingdom:Wooded",
+        "zone:Wooded:DW Odyssey"
+      ]
+    },
+    {
+      "map_node": "zone:Wooded:DW Red Maze",
+      "loading_zone_name": "ForestWorldWoodsStage",
+      "in_game_name": "Deep Woods",
+      "kingdom": "Wooded Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [
+        "Climb"
+      ],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Climb",
+              "name": "Climb",
+              "type": "ability",
+              "aliases": [
+                "Climb"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Climb",
+              "name": "Climb",
+              "type": "ability",
+              "aliases": [
+                "Climb"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Climb",
+              "name": "Climb",
+              "type": "ability",
+              "aliases": [
+                "Climb"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Climb",
+              "name": "Climb",
+              "type": "ability",
+              "aliases": [
+                "Climb"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Climb",
+              "name": "Climb",
+              "type": "ability",
+              "aliases": [
+                "Climb"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Climb",
+              "name": "Climb",
+              "type": "ability",
+              "aliases": [
+                "Climb"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Climb",
+              "name": "Climb",
+              "type": "ability",
+              "aliases": [
+                "Climb"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Climb",
+              "name": "Climb",
+              "type": "ability",
+              "aliases": [
+                "Climb"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Wooded:DW Treasure",
+      "loading_zone_name": "ForestWorldWoodsTreasureStage",
+      "in_game_name": "Deep Woods Treasure Vault",
+      "kingdom": "Wooded Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Wooded:Flooded Pipes",
+      "loading_zone_name": "ForestWorldWaterExStage",
+      "in_game_name": "Flooding Pipeway",
+      "kingdom": "Wooded Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Wooded:Flower Road",
+      "loading_zone_name": "RailCollisionExStage",
+      "in_game_name": "Flower Road",
+      "kingdom": "Wooded Kingdom",
+      "captures_needed": [
+        "Goomba"
+      ],
+      "abilities_needed": [
+        "Wall Jump",
+        "Ledge Grab",
+        "Dive",
+        "Ground Pound",
+        "Roll Boost",
+        "Vault",
+        "Neutral Throw",
+        "Triple Jump"
+      ],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "WallJump",
+              "name": "Wall Jump",
+              "type": "ability",
+              "aliases": [
+                "Wall Jump"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "Kuribo",
+              "name": "Goomba",
+              "type": "capture",
+              "aliases": [
+                "Goomba"
+              ]
+            },
+            {
+              "token": "LedgeGrab",
+              "name": "Ledge Grab",
+              "type": "ability",
+              "aliases": [
+                "Ledge Grab"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "Kuribo",
+              "name": "Goomba",
+              "type": "capture",
+              "aliases": [
+                "Goomba"
+              ]
+            },
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "GroundPound",
+              "name": "Ground Pound",
+              "type": "ability",
+              "aliases": [
+                "Ground Pound"
+              ]
+            },
+            {
+              "token": "RollBoost",
+              "name": "Roll Boost",
+              "type": "ability",
+              "aliases": [
+                "Roll Boost"
+              ]
+            },
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            },
+            {
+              "token": "NeutralThrow",
+              "name": "Neutral Throw",
+              "type": "ability",
+              "aliases": [
+                "Neutral Throw"
+              ]
+            },
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "advanced",
+          "tokens": [
+            {
+              "token": "TripleJump",
+              "name": "Triple Jump",
+              "type": "ability",
+              "aliases": [
+                "Triple Jump"
+              ]
+            },
+            {
+              "token": "Dive",
+              "name": "Dive",
+              "type": "ability",
+              "aliases": [
+                "Dive"
+              ]
+            },
+            {
+              "token": "Vault",
+              "name": "Vault",
+              "type": "ability",
+              "aliases": [
+                "Vault"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Wooded:Invisible",
+      "loading_zone_name": "PackunPoisonExStage",
+      "in_game_name": "Invisible Road",
+      "kingdom": "Wooded Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Wooded:Rocket",
+      "loading_zone_name": "FogMountainExStage",
+      "in_game_name": "Shards in the Fog",
+      "kingdom": "Wooded Kingdom",
+      "captures_needed": [
+        "Mini Rocket"
+      ],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "BazookaElectric",
+              "name": "Mini Rocket",
+              "type": "capture",
+              "aliases": [
+                "Mini Rocket"
+              ]
+            }
+          ]
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "BazookaElectric",
+              "name": "Mini Rocket",
+              "type": "capture",
+              "aliases": [
+                "Mini Rocket"
+              ]
+            }
+          ]
+        },
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "BazookaElectric",
+              "name": "Mini Rocket",
+              "type": "capture",
+              "aliases": [
+                "Mini Rocket"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Wooded:Sheep",
+      "loading_zone_name": "AnimalChaseExStage",
+      "in_game_name": "Herding Sheep",
+      "kingdom": "Wooded Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Wooded:Tank",
+      "loading_zone_name": "ShootingElevatorExStage",
+      "in_game_name": "Crowded Elevator",
+      "kingdom": "Wooded Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "impossible",
+              "name": "Impossible",
+              "type": "constant",
+              "aliases": [
+                "unreachable"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Wooded:Treasure Room",
+      "loading_zone_name": "ForestWorldBonusStage",
+      "in_game_name": "Spinning-Platforms Treasure Vault",
+      "kingdom": "Wooded Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        },
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "impossible",
+              "name": "Impossible",
+              "type": "constant",
+              "aliases": [
+                "unreachable"
+              ]
+            }
+          ]
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Wooded:Vine Clouds",
+      "loading_zone_name": "ForestWorldCloudBonusExStage",
+      "in_game_name": "Walking on Clouds",
+      "kingdom": "Wooded Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [
+        "Climb"
+      ],
+      "getting_to_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": [
+            {
+              "token": "Climb",
+              "name": "Climb",
+              "type": "ability",
+              "aliases": [
+                "Climb"
+              ]
+            }
+          ]
+        }
+      ],
+      "in_the_zone": [
+        {
+          "difficulty": "casual",
+          "tokens": []
+        }
+      ],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Mushroom:Torkdrift",
+      "loading_zone_name": "PeachWorldPictureBossForestStage",
+      "in_game_name": "Painting Room: Torkdrift",
+      "kingdom": "Mushroom Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Mushroom:Knucklotec",
+      "loading_zone_name": "PeachWorldPictureBossKnuckleStage",
+      "in_game_name": "Painting Room: Knucklotec",
+      "kingdom": "Mushroom Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Mushroom:Cookatiel",
+      "loading_zone_name": "PeachWorldPictureBossMagmaStage",
+      "in_game_name": "Painting Room: Cookatiel",
+      "kingdom": "Mushroom Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Mushroom:Dragon",
+      "loading_zone_name": "PeachWorldPictureBossRaidStage",
+      "in_game_name": "Painting Room: Lord of Lightning",
+      "kingdom": "Mushroom Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Mushroom:Octopus",
+      "loading_zone_name": "PeachWorldPictureGiantWanderBossStage",
+      "in_game_name": "Painting Room: Mollusque-Lanceur",
+      "kingdom": "Mushroom Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [],
+      "shares_stage_with": []
+    },
+    {
+      "map_node": "zone:Mushroom:Mechawiggler",
+      "loading_zone_name": "PeachWorldPictureMofumofuStage",
+      "in_game_name": "Painting Room: Mechawiggler",
+      "kingdom": "Mushroom Kingdom",
+      "captures_needed": [],
+      "abilities_needed": [],
+      "getting_to_the_zone": [],
+      "in_the_zone": [],
+      "shares_stage_with": []
+    }
+  ]
+}

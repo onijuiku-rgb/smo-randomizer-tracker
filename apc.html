@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Abilities &amp; Captures</title>
+<link rel="icon" href="assets/SMO-ColoredGlobe.png">
+<link rel="stylesheet" href="style.css?v=2">
+</head>
+
+<!-- Embedded in the tracker's side panel (see applySidePanel in app.js) or
+     popped out into its own window. Same origin as index.html, so it shares
+     localStorage - every toggle here is a read-modify-write against the same
+     tracker_state key, then a BroadcastChannel ping so the other window
+     redraws. Entries linked to the main tracker (Bowser, Spark Pylon, Banzai
+     Bill, Parabones, Wall Jump, High Jump, Cap Bounce) write straight into
+     state.captures / state.abilities, which is what OBS already reads. -->
+
+<body class="apc-body">
+
+  <!-- ── Top bar ─────────────────────────────────────────────────── -->
+  <div class="apc-toolbar">
+    <input type="search" id="apc-search" class="apc-search" placeholder="Search…" autocomplete="off">
+
+    <div class="segmented" id="apc-seg-sort">
+      <button type="button" class="seg-btn" data-value="locked">Locked First</button>
+      <button type="button" class="seg-btn" data-value="unlocked">Unlocked First</button>
+      <button type="button" class="seg-btn" data-value="game">Game Order</button>
+      <button type="button" class="seg-btn" data-value="az">A-Z</button>
+    </div>
+
+    <div class="segmented" id="apc-seg-size">
+      <button type="button" class="seg-btn" data-value="small">S</button>
+      <button type="button" class="seg-btn" data-value="medium">M</button>
+      <button type="button" class="seg-btn" data-value="large">L</button>
+    </div>
+
+    <label class="apc-toolbar-toggle">
+      <span>Hide Unlocked</span>
+      <span class="toggle-switch">
+        <input type="checkbox" id="apc-hide-unlocked">
+        <span class="toggle-track"></span>
+      </span>
+    </label>
+
+    <label class="apc-toolbar-toggle">
+      <span>Hide Labels</span>
+      <span class="toggle-switch">
+        <input type="checkbox" id="apc-hide-labels">
+        <span class="toggle-track"></span>
+      </span>
+    </label>
+
+    <button type="button" class="apc-popout-btn" id="apc-popout" title="Open in a new tab">↗️Popout</button>
+    <button type="button" class="apc-reset-btn" id="apc-reset">Reset</button>
+  </div>
+
+  <!-- ── Content ─────────────────────────────────────────────────── -->
+  <div class="apc-scroll">
+    <section class="apc-section">
+      <div class="apc-section-header">
+        <h2>Captures</h2>
+        <span class="apc-counter" id="apc-count-captures">0 / 0</span>
+      </div>
+      <div class="apc-grid" id="apc-grid-captures"></div>
+      <p class="apc-empty hidden" id="apc-empty-captures">Nothing matches.</p>
+    </section>
+
+    <section class="apc-section">
+      <div class="apc-section-header">
+        <h2>Abilities</h2>
+        <span class="apc-counter" id="apc-count-abilities">0 / 0</span>
+      </div>
+      <div class="apc-grid" id="apc-grid-abilities"></div>
+      <p class="apc-empty hidden" id="apc-empty-abilities">Nothing matches.</p>
+    </section>
+  </div>
+
+<script src="apc-data.js?v=2"></script>
+<script>
+(function () {
+  'use strict';
+
+  const STATE_KEY = 'tracker_state';
+
+  // Panel-only view options. They live in settings so they persist and travel
+  // with a downloaded save file like everything else.
+  const VIEW_DEFAULTS = {
+    apc_sort: 'locked',       // 'locked' | 'unlocked' | 'game' | 'az'
+    apc_size: 'medium',       // 'small' | 'medium' | 'large'
+    apc_hide_unlocked: false,
+    apc_hide_labels: false,   // hide the text labels (icons get bigger)
+  };
+
+  let state = { settings: {}, captures: {}, abilities: {}, apc: { captures: {}, abilities: {} } };
+  let search = '';
+  let suppressBroadcast = false;
+
+  // Safety net. Anything else sharing this localStorage - the tracker, the OBS
+  // page, a second tab, an older cached copy of app.js - could write a state
+  // that predates a click made here and silently undo it. So remember what this
+  // panel has just changed, and if a re-read comes back disagreeing, put it
+  // back and re-save. Entries expire quickly so the panel never permanently
+  // fights a legitimate change made somewhere else.
+  const EDIT_GRACE_MS = 4000;
+  let warnedAboutClobber = false;
+  // True while this panel is applying its own change. A re-read during that
+  // window may legitimately need correcting (the edit is noted before it's
+  // written), so correct silently rather than reporting a clobber.
+  let inMutate = false;
+  const recentEdits = { captures: new Map(), abilities: new Map() };
+  const recentSettings = new Map();
+
+  function noteEdit(kind, key, value) {
+    recentEdits[kind].set(key, { value, at: Date.now() });
+  }
+  function noteSetting(key, value) {
+    recentSettings.set(key, { value, at: Date.now() });
+  }
+
+  // Returns true if anything had to be corrected, i.e. we were clobbered.
+  function reassertRecentEdits() {
+    const now = Date.now();
+    let corrected = false;
+
+    for (const kind of ['captures', 'abilities']) {
+      for (const [key, rec] of recentEdits[kind]) {
+        if (now - rec.at > EDIT_GRACE_MS) { recentEdits[kind].delete(key); continue; }
+        if (APC.isUnlocked(state, kind, key) !== rec.value) {
+          APC.setUnlocked(state, kind, key, rec.value);
+          corrected = true;
+        }
+      }
+    }
+    for (const [key, rec] of recentSettings) {
+      if (now - rec.at > EDIT_GRACE_MS) { recentSettings.delete(key); continue; }
+      if (state.settings[key] !== rec.value) {
+        state.settings[key] = rec.value;
+        corrected = true;
+      }
+    }
+    return corrected;
+  }
+
+  // A change from the main tracker (or another window) redraws in place for the
+  // same reason a local toggle does - see orderCache.
+  //
+  // apc-data.js deliberately delivers over three routes at once (Broadcast
+  // Channel, postMessage, storage event) since not all of them work on every
+  // setup - file:// pages in particular can drop BroadcastChannel/localStorage
+  // sharing between windows. That means a single change can arrive as two or
+  // three back-to-back messages. Reacting to each one individually stacks up
+  // redraws right when the user might be mid-click, so coalesce them into one
+  // redraw on the next frame instead.
+  let externalRenderPending = false;
+  let externalResort = false;
+  function scheduleExternalRender(data) {
+    // An authoritative wipe from the main tracker's Clear button. Drop this
+    // panel's short-lived edit protection immediately (synchronously, before
+    // any pending render runs) so it can't re-assert an entry that was just
+    // cleared, and resort so the freshly-locked entries settle into place.
+    if (data && data.type === 'apc-reset') {
+      recentEdits.captures.clear();
+      recentEdits.abilities.clear();
+      recentSettings.clear();
+      warnedAboutClobber = false;
+      externalResort = true;
+    }
+    if (externalRenderPending) return;
+    externalRenderPending = true;
+    requestAnimationFrame(() => {
+      externalRenderPending = false;
+      const resort = externalResort;
+      externalResort = false;
+      readState();
+      render(resort);
+    });
+  }
+  const channel = APC.makeChannel(scheduleExternalRender);
+
+  // ── State ──────────────────────────────────────────────────────────────────
+  function readState() {
+    try {
+      const raw = localStorage.getItem(STATE_KEY);
+      state = raw ? JSON.parse(raw) : {};
+    } catch (e) {
+      console.error('APC: failed to read state', e);
+      state = {};
+    }
+    if (!state.settings) state.settings = {};
+    if (!state.captures) state.captures = {};
+    if (!state.abilities) state.abilities = {};
+    APC.ensure(state);
+    for (const [k, v] of Object.entries(VIEW_DEFAULTS)) {
+      if (!(k in state.settings)) state.settings[k] = v;
+    }
+
+    // If something wrote over a click we just made, restore it and push it back
+    // out so the other window picks up the corrected version.
+    if (reassertRecentEdits()) {
+      if (!warnedAboutClobber && !inMutate) {
+        warnedAboutClobber = true;
+        console.warn('Abilities & Captures: another window wrote over a change made here, ' +
+                     'and it has been restored. If this keeps happening, hard-refresh with ' +
+                     'Ctrl+F5 so every file is the current version.');
+      }
+      try { localStorage.setItem(STATE_KEY, JSON.stringify(state)); } catch (e) {}
+      channel.post({ type: 'apc-changed' });
+    }
+  }
+
+  // Always re-read before writing: the main window may have changed something
+  // else (moon counts, notes) since this page last rendered, and this page must
+  // not stomp it.
+  function mutate(fn) {
+    inMutate = true;
+    readState();
+    fn(state);
+    try {
+      localStorage.setItem(STATE_KEY, JSON.stringify(state));
+    } catch (e) {
+      console.error('APC: failed to save state', e);
+    }
+    inMutate = false;
+    if (!suppressBroadcast) channel.post({ type: 'apc-changed' });
+  }
+
+  // ── Rendering ──────────────────────────────────────────────────────────────
+  // Last computed order per section, as a list of keys. Toggling an entry
+  // re-sorts immediately so a freshly (un)locked item jumps to its new spot
+  // under "Locked First" / "Unlocked First" right when you click it, rather
+  // than lingering until the next sort/search/Hide-Unlocked change. The order
+  // also refreshes on those changes and whenever the panel is reopened.
+  // (Trade-off: under a lock-sensitive sort the grid shifts under the cursor
+  // as items move, so rapid tick-off runs can land on a neighbouring entry.)
+  let orderCache = { captures: null, abilities: null };
+
+  function sortedItems(kind) {
+    const list = kind === 'captures' ? APC.CAPTURES : APC.ABILITIES;
+    const sort = state.settings.apc_sort;
+    const items = list.map(it => ({ ...it, unlocked: APC.isUnlocked(state, kind, it.key) }));
+
+    if (sort === 'az') {
+      items.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sort === 'locked') {
+      // Unlocked entries drop to the bottom, each group still in game order.
+      items.sort((a, b) => (a.unlocked - b.unlocked) || (a.order - b.order));
+    } else if (sort === 'unlocked') {
+      items.sort((a, b) => (b.unlocked - a.unlocked) || (a.order - b.order));
+    } // 'game' = leave in list order
+
+    return items;
+  }
+
+  function visibleItems(kind, resort) {
+    if (resort || !orderCache[kind]) {
+      orderCache[kind] = sortedItems(kind).map(it => it.key);
+    }
+
+    const byKey = new Map(
+      (kind === 'captures' ? APC.CAPTURES : APC.ABILITIES).map(it => [it.key, it])
+    );
+
+    let items = orderCache[kind]
+      .map(key => byKey.get(key))
+      .filter(Boolean)
+      .map(it => ({ ...it, unlocked: APC.isUnlocked(state, kind, it.key) }));
+
+    const hide = !!state.settings.apc_hide_unlocked;
+    const q = search.trim().toLowerCase();
+    if (q) items = items.filter(it => it.name.toLowerCase().includes(q));
+    if (hide) items = items.filter(it => !it.unlocked);
+
+    return items;
+  }
+
+  // Key -> the wrapper element currently in the DOM for it, per section.
+  // Reusing nodes (instead of wiping and rebuilding the grid on every toggle)
+  // matters for more than tidiness: if a click on item B lands while item A's
+  // toggle is still tearing down/rebuilding the whole grid, B's element can
+  // get replaced between mousedown and mouseup and the browser drops the
+  // click entirely. Updating existing nodes in place means the element under
+  // your cursor is still the same element a moment later, so fast clicks
+  // (and redraws triggered by an incoming sync message) can't eat each other.
+  const gridElems = { captures: new Map(), abilities: new Map() };
+
+  function buildItem(kind, it) {
+    const wrap = document.createElement('div');
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'apc-icon-btn';
+
+    const img = document.createElement('img');
+    img.src = it.src;
+    img.alt = it.name;
+    img.loading = 'lazy';
+    // A missing file shouldn't leave a broken-image glyph in the grid.
+    img.addEventListener('error', () => wrap.classList.add('apc-missing'));
+    btn.appendChild(img);
+
+    const label = document.createElement('span');
+    label.className = 'apc-label';
+    label.textContent = it.name;
+
+    const toggle = () => {
+      const next = !APC.isUnlocked(state, kind, it.key);
+      noteEdit(kind, it.key, next);
+      mutate(s => APC.setUnlocked(s, kind, it.key, next));
+      // Re-sort on click so a freshly (un)locked entry jumps to its new
+      // position immediately under Locked/Unlocked First, instead of waiting
+      // for the next sort/search/filter change. Nodes are still reused (see
+      // gridElems), so the same element just slides into place.
+      render(true);
+    };
+    btn.addEventListener('click', toggle);
+    // Clicking the name works too - it's a bigger target than the icon.
+    label.addEventListener('click', toggle);
+
+    wrap.appendChild(btn);
+    wrap.appendChild(label);
+    return wrap;
+  }
+
+  function renderGrid(kind, resort) {
+    const grid = document.getElementById(`apc-grid-${kind}`);
+    const empty = document.getElementById(`apc-empty-${kind}`);
+    const items = visibleItems(kind, resort);
+    const elems = gridElems[kind];
+
+    empty.classList.toggle('hidden', items.length > 0);
+
+    const seen = new Set();
+    let cursor = grid.firstChild;
+
+    for (const it of items) {
+      seen.add(it.key);
+      let wrap = elems.get(it.key);
+      if (!wrap) {
+        wrap = buildItem(kind, it);
+        elems.set(it.key, wrap);
+      }
+
+      // Update state-dependent bits in place rather than recreating anything.
+      wrap.className = 'apc-item' + (it.unlocked ? ' unlocked' : ' locked');
+      const btn = wrap.querySelector('.apc-icon-btn');
+      btn.title = it.name;
+      btn.setAttribute('aria-pressed', String(it.unlocked));
+
+      // Make sure this node sits in the right slot in the current order
+      // without touching nodes that are already correctly positioned.
+      if (cursor !== wrap) {
+        grid.insertBefore(wrap, cursor);
+      } else {
+        cursor = cursor.nextSibling;
+      }
+    }
+
+    // Drop nodes for keys that are no longer visible (filtered/searched out
+    // or removed), and forget them so they don't leak.
+    for (const [key, wrap] of elems) {
+      if (!seen.has(key)) {
+        wrap.remove();
+        elems.delete(key);
+      }
+    }
+  }
+
+  function renderCounters() {
+    document.getElementById('apc-count-captures').textContent =
+      `${APC.countUnlocked(state, 'captures')} / ${APC.CAPTURES.length}`;
+    document.getElementById('apc-count-abilities').textContent =
+      `${APC.countUnlocked(state, 'abilities')} / ${APC.ABILITIES.length}`;
+  }
+
+  function renderToolbar() {
+    document.querySelectorAll('#apc-seg-sort .seg-btn').forEach(b =>
+      b.classList.toggle('active', b.dataset.value === state.settings.apc_sort));
+    document.querySelectorAll('#apc-seg-size .seg-btn').forEach(b =>
+      b.classList.toggle('active', b.dataset.value === state.settings.apc_size));
+    document.getElementById('apc-hide-unlocked').checked = !!state.settings.apc_hide_unlocked;
+    document.getElementById('apc-hide-labels').checked = !!state.settings.apc_hide_labels;
+
+    document.body.classList.remove('apc-size-small', 'apc-size-medium', 'apc-size-large');
+    document.body.classList.add(`apc-size-${state.settings.apc_size || 'medium'}`);
+    // Icons-only mode: hides the text labels and enlarges the icons (see the
+    // .apc-hide-labels rules in style.css).
+    document.body.classList.toggle('apc-hide-labels', !!state.settings.apc_hide_labels);
+  }
+
+  function render(resort) {
+    if (resort === undefined) resort = true;
+    renderToolbar();
+    renderGrid('captures', resort);
+    renderGrid('abilities', resort);
+    renderCounters();
+  }
+
+  // ── Wiring ─────────────────────────────────────────────────────────────────
+  document.getElementById('apc-search').addEventListener('input', (e) => {
+    search = e.target.value;
+    renderGrid('captures');
+    renderGrid('abilities');
+  });
+
+  document.querySelectorAll('#apc-seg-sort .seg-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      noteSetting('apc_sort', btn.dataset.value);
+      mutate(s => { s.settings.apc_sort = btn.dataset.value; });
+      render();
+    });
+  });
+
+  document.querySelectorAll('#apc-seg-size .seg-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      noteSetting('apc_size', btn.dataset.value);
+      mutate(s => { s.settings.apc_size = btn.dataset.value; });
+      render();
+    });
+  });
+
+  document.getElementById('apc-hide-unlocked').addEventListener('change', (e) => {
+    noteSetting('apc_hide_unlocked', e.target.checked);
+    mutate(s => { s.settings.apc_hide_unlocked = e.target.checked; });
+    render();
+  });
+
+  document.getElementById('apc-hide-labels').addEventListener('change', (e) => {
+    noteSetting('apc_hide_labels', e.target.checked);
+    mutate(s => { s.settings.apc_hide_labels = e.target.checked; });
+    // Only the labels/sizing change, so no resort is needed - redraw in place.
+    render(false);
+  });
+
+  // Pop this panel out into its own browser tab. The named target means
+  // clicking it again just refocuses the same tab rather than piling up new
+  // ones, and it's the same target the main tracker's "Ability + Capture"
+  // button uses, so the two never fight over separate tabs.
+  document.getElementById('apc-popout').addEventListener('click', () => {
+    window.open('apc.html?v=2', 'AbilitiesCaptures');
+  });
+
+  document.getElementById('apc-reset').addEventListener('click', () => {
+    if (!confirm('Clear every capture and ability? This also clears the linked icons on the main tracker.')) return;
+    APC.CAPTURES.forEach(it => noteEdit('captures', it.key, false));
+    APC.ABILITIES.forEach(it => noteEdit('abilities', it.key, false));
+    mutate(s => {
+      APC.CAPTURES.forEach(it => APC.setUnlocked(s, 'captures', it.key, false));
+      APC.ABILITIES.forEach(it => APC.setUnlocked(s, 'abilities', it.key, false));
+    });
+    render();
+  });
+
+  readState();
+  render();
+})();
+</script>
+</body>
+</html>

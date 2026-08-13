@@ -1,0 +1,48 @@
+rules_version = '2';
+
+// Live-tracking event log. Access control is entirely room-code-based (the
+// path itself), not user auth - same trust model the local relay's room
+// codes already use (see README: "Room codes are not authenticated. Use
+// random/generated codes and keep them private."). No FirebaseAuth identity
+// is required or expected here.
+//
+// Paste this into Firebase Console -> Firestore Database -> Rules -> Publish
+// (or `firebase deploy --only firestore:rules` if you have the Firebase CLI
+// set up). Do NOT use the "test mode" default rule
+// (`allow read, write: if true` on every document) - it's the same
+// permissiveness as below but unscoped to this one collection shape.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /rooms/{roomCode}/events/{eventId} {
+      // Anyone with the room code can listen for new events.
+      allow read: if true;
+
+      // Anyone with the room code can post a new event - this is the whole
+      // point (no auth step for a public user, just a room code). The shape
+      // check below isn't a security boundary, just a lightweight guard
+      // against obviously malformed/oversized spam documents.
+      //
+      // Raw stage names (exitId/from/to/debugArrivalDoorId), not resolved
+      // map_node ids - the mod has no copy of loading_zone_dictionary.json to
+      // resolve them with itself (that's tracker-server.js's job locally),
+      // so in cloud mode the browser side (firebase-live-sync.js) does that
+      // same resolution after reading the raw event back out.
+      //
+      // No timestamp field either: the mod has no reliable wall clock to
+      // stamp one with (see TrackerBridge.cpp), so there's nothing here for
+      // a TTL policy to key off yet - a later improvement could add one via
+      // a Cloud Function's server-side FieldValue.serverTimestamp() on
+      // write, if unbounded event history ever becomes a real storage
+      // concern.
+      allow create: if request.resource.data.keys().hasOnly(['exitId', 'from', 'to', 'debugArrivalDoorId'])
+                    && request.resource.data.from is string
+                    && request.resource.data.to is string
+                    && request.resource.data.from.size() < 200
+                    && request.resource.data.to.size() < 200;
+
+      // Events are an append-only log - nothing should ever edit or delete
+      // one after the fact.
+      allow update, delete: if false;
+    }
+  }
+}

@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OBS Overlay</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+
+  <style>
+    :root { --text: #fff; --font: 'Fredoka One'; --green: #4ade80; }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 315px;
+      height: 450px;
+      overflow: hidden;
+      background: transparent;
+      color: var(--text);
+      font-family: 'Fredoka One';
+    }
+
+    /* #obs-root is the scaled element. It's a vertical stack: the Moon Updater
+       strip plus the main overlay body (moon list + right column). Its height
+       is set from JS to match getObsBaseH() so it grows for the Moon Kingdom
+       row and/or the updater strip. */
+    #obs-root {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start; /* tracker body stays left; updater may be wider */
+      width: 315px;
+      height: 450px;
+      transform-origin: top left;
+    }
+
+    /* The main overlay body: moon list on the left, icons/total on the right */
+    #obs-main {
+      display: flex;
+      flex-direction: row;
+      width: 315px;
+      flex: 1;
+      min-height: 0;
+    }
+
+    /* Popup mode: page fills the actual (possibly user-resized) window;
+       #obs-root is scaled via JS to fit while keeping its base proportions. */
+    html.popup-mode, body.popup-mode {
+      width: 100vw;
+      height: 100vh;
+    }
+
+    /* ── Moon Updater strip ───────── */
+    /* Width is set from JS (wider than the 315px tracker body) so messages
+       don't clip; long lines wrap onto a second line instead. */
+    #obs-updater {
+      display: none; /* shown from JS when the setting is on */
+      flex-direction: column;
+      justify-content: flex-end; /* newest messages sit at the bottom */
+      width: 100%; /* fills #obs-root, whose width is set from JS */
+      gap: 2px;
+      padding: 5px 8px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    /* In the popup window the strip is slightly darker than the overlay's
+       #181818 background so it reads as a distinct panel. In Browser Source
+       mode everything stays transparent (no background). */
+    #obs-updater.updater-popup { background: #0d0d0d; }
+
+    .upd-msg {
+      min-height: 22px;
+      line-height: 22px;
+      font-size: 0.95rem;
+      white-space: normal;       /* allow wrapping to a second line */
+      overflow-wrap: anywhere;
+    }
+    .upd-msg img.upd-icon {
+      height: 18px; width: 18px;
+      object-fit: contain;
+      vertical-align: middle;
+      margin: 0 3px;
+    }
+    .upd-num, .upd-text, .upd-unlock { vertical-align: middle; }
+    .upd-num    { color: #fff; margin-right: 2px; }
+    .upd-unlock { color: #fff; }
+
+    /* ── Left column: moon rows ───── */
+    #obs-moon-list {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      gap: 5px;
+      padding: 8px 6px 8px 8px;
+      flex-shrink: 0;
+    }
+
+    .obs-moon-row {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+    .obs-moon-row.row-gone { display: none; }
+
+    .obs-moon-row.row-complete {
+      background: rgba(74, 222, 128, 0.18);
+    }
+
+    .obs-moon-row img.obs-lock,
+    .obs-moon-row img.obs-peace,
+    .obs-moon-row img.obs-rock {
+      width: 18px;
+      height: 18px;
+      object-fit: contain;
+    }
+    /* Individually hidden lock/peace/rock sign columns. Moon Rock is off by
+       default, so its icon-off class is present unless the setting is on. */
+    .obs-moon-row img.obs-lock.icon-off,
+    .obs-moon-row img.obs-peace.icon-off,
+    .obs-moon-row img.obs-rock.icon-off { display: none; }
+
+    .obs-moon-row img.obs-kingdom {
+      height: 35px;
+      width: 35px;
+      object-fit: contain;
+      transition: filter 0.2s;
+    }
+    .obs-moon-row img.obs-kingdom.icon-white {
+      filter: brightness(0) invert(1);
+    }
+
+    .obs-count {
+      font-size: 1.5rem;
+      white-space: nowrap;
+      min-width: 55px;
+      text-align: center;
+      transition: color 0.2s;
+    }
+    .obs-count.count-complete { color: var(--green); }
+
+    /* ── Right column ─────────────── */
+    #obs-right {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px 10px 10px 8px;
+      gap: 5px;
+      flex: 1;
+    }
+
+    .obs-section-header {
+      font-size: 1rem;
+      text-align: center;
+      letter-spacing: 0.05em;
+      padding: 6px 0 3px;
+      width: 100%;
+    }
+
+    .obs-icon-row {
+      display: flex;
+      flex-direction: row;
+      gap: 5px;
+      justify-content: center;
+    }
+
+    .obs-icon-row img {
+      height: 38px;
+      width: 38px;
+      object-fit: contain;
+    }
+    /* Moon Cave captures (parabones, banzai, wire, golden) read as a 2x2 grid
+       instead of one long row. The Cave Skip ability row stays a plain flex row. */
+    #obs-capture-icons {
+      display: grid;
+      grid-template-columns: repeat(2, 38px);
+      justify-content: center;
+      gap: 5px;
+    }
+    /* Individually hidden ability icons (Jump / Cap Bounce). justify-center on
+       the row keeps whatever remains centered under the "Cave Skip" label. */
+    .obs-icon-row img.icon-off { display: none; }
+
+    #obs-bowser {
+      display: flex;
+      justify-content: center;
+      padding: 6px 0;
+    }
+    #obs-bowser img {
+      height: 42px;
+      width: 42px;
+      object-fit: contain;
+    }
+
+    #obs-total-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 6px 0 2px;
+    }
+    #obs-total-label {
+      font-size: 1rem;
+      letter-spacing: 0.05em;
+    }
+
+    #obs-total {
+      font-size: 1.5rem;
+      text-align: center;
+      letter-spacing: 0.05em;
+      padding: 6px 0 2px;
+    }
+
+    /* Sections that may be hidden via settings */
+    #obs-capture-section.hidden,
+    #obs-ability-section.hidden,
+    #obs-bowser.hidden,
+    #obs-total-wrap.hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div id="obs-root">
+    <!-- Moon Updater strip (position/visibility controlled from JS) -->
+    <div id="obs-updater"></div>
+
+    <div id="obs-main">
+      <div id="obs-moon-list"></div>
+      <div id="obs-right">
+        <div id="obs-capture-section">
+          <div class="obs-section-header">Moon Cave</div>
+          <div class="obs-icon-row" id="obs-capture-icons"></div>
+        </div>
+        <div id="obs-ability-section">
+          <div class="obs-section-header">Cave Skip</div>
+          <div class="obs-icon-row" id="obs-ability-icons"></div>
+        </div>
+        <div id="obs-bowser"><img id="obs-bowser-img" src="assets/Bowser_Capture_Locked.png" alt="Bowser"></div>
+        <div id="obs-total-wrap">
+          <div id="obs-total-label">Moons:</div>
+          <div id="obs-total">0 / 124</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="sync.js"></script>
+  <script>
+    'use strict';
+
+    const STATE_KEY = 'tracker_state';
+
+    // ── OBS overlay base size ─────────────────────────────────────
+    // Keep these OBS_* constants identical to the ones in app.js so the size
+    // this page renders always matches the "OBS size" the tracker advertises.
+    const OBS_BASE_W = 315;
+    const OBS_BASE_H = 450;        // 11 kingdoms, no updater
+    const OBS_ROCK_COL_W = 23;     // extra body width when the Moon Rock column shows (18px icon + 5px gap)
+    const OBS_MOON_ROW_H = 40;     // added when Moon Kingdom shows on the overlay
+    const OBS_CAP_ROW_H = 40;      // added when Cap Kingdom shows on the overlay
+    const OBS_UPDATER_MSG_H = 24;  // per visible updater message
+    const OBS_UPDATER_PAD = 12;    // updater strip padding (top + bottom)
+
+    const BASE_W = OBS_BASE_W;
+
+    // Computed once the query string never changes during this page's life
+    const params   = new URLSearchParams(window.location.search);
+    const isPopup  = !!params.get('popup');
+    const room     = params.get('room');
+    const wsUrl    = params.get('ws');
+
+    // Once a server room is configured we rely on it exclusively local
+    // tracker (localStorage) updates are ignored from that point on.
+    let serverMode = false;
+
+    // name/img/multi/max plus the kingdom color + short label used by the Moon
+    // Updater. Moon Kingdom is optional (settingKey) and only appears on the
+    // overlay when both show_kingdom_moon and show_moon_obs are on.
+    // Kingdom order MUST match app.js's KINGDOMS exactly, since moon state and
+    // kingdom_order are indexed by array position. Optional kingdoms (Moon, Cap)
+    // live at the end; DEFAULT_DISPLAY_ORDER puts Cap on top for display.
+    const KINGDOMS = [
+      { name:'Cascade Kingdom',  img:'assets/Cascade.png',  multi:'assets/Cascade_Multi.png',  max:10, color:'#ff9900', short:'Cascade'  },
+      { name:'Sand Kingdom',     img:'assets/Sand.png',     multi:'assets/Sand_Multi.png',     max:21, color:'#8bf12c', short:'Sand'     },
+      { name:'Lake Kingdom',     img:'assets/Lake.png',     multi:'assets/Lake_Multi.png',     max:13, color:'#e46cab', short:'Lake'     },
+      { name:'Wooded Kingdom',   img:'assets/Wooded.png',   multi:'assets/Wooded_Multi.png',   max:21, color:'#1e65e7', short:'Wooded'   },
+      { name:'Lost Kingdom',     img:'assets/Lost.png',     multi:'assets/Lost_Multi.png',     max:15, color:'#e71edd', short:'Lost'     },
+      { name:'Metro Kingdom',    img:'assets/Metro.png',    multi:'assets/Metro_Multi.png',    max:25, color:'#de7d5e', short:'Metro'    },
+      { name:'Snow Kingdom',     img:'assets/Snow.png',     multi:'assets/Snow_Multi.png',     max:15, color:'#e7930a', short:'Snow'     },
+      { name:'Seaside Kingdom',  img:'assets/Seaside.png',  multi:'assets/Seaside_Multi.png',  max:15, color:'#b36fe9', short:'Seaside'  },
+      { name:'Luncheon Kingdom', img:'assets/Luncheon.png', multi:'assets/Luncheon_Multi.png', max:23, color:'#3fddbb', short:'Luncheon' },
+      { name:'Ruined Kingdom',   img:'assets/Ruin.png',     multi:'assets/Ruined_Multi.png',   max:8,  color:'#ffd7e2', short:'Ruined'   },
+      { name:'Bowser Kingdom',   img:'assets/Bowser.png',   multi:'assets/Bowser_Multi.png',   max:13, color:'#d3304c', short:'Bowser'   },
+      { name:'Moon Kingdom',     img:'assets/MoonK.png',    multi:'assets/MoonK_Multi.png',    max:12, color:'#b5c1cb', short:'Moon Kingdom', settingKey:'show_kingdom_moon', obsKey:'show_moon_obs' },
+      { name:'Cap Kingdom',      img:'assets/Cap.png',      multi:'assets/Cascade_Multi.png',  max:16, color:'#fff500', short:'Cap', settingKey:'show_kingdom_cap', obsKey:'show_cap_obs' },
+    ];
+
+    // Default on-screen order (mirrors app.js): Cap first (above Cascade),
+    // everything else in array order so Moon stays last. A user's drag-reorder
+    // (kingdom_order) still wins over this.
+    const DEFAULT_DISPLAY_ORDER = (() => {
+      const capIdx = KINGDOMS.findIndex(k => k.name === 'Cap Kingdom');
+      const rest = KINGDOMS.map((_, i) => i).filter(i => i !== capIdx);
+      return capIdx === -1 ? rest : [capIdx, ...rest];
+    })();
+
+    const CAPTURE_ICONS = [
+      { key:'parabones', locked:'assets/Parabones_Capture_Locked.png',    unlocked:'assets/Parabones_Capture.png'      },
+      { key:'banzai',    locked:'assets/Banzai_Bill_Capture_Locked.png',  unlocked:'assets/Banzai_Bill_Capture.png'    },
+      { key:'wire',      locked:'assets/Spark_pylon_Capture_Locked.png',  unlocked:'assets/Spark_pylon_Capture.png'    },
+      { key:'golden',    locked:'assets/golden_locked.png',               unlocked:'assets/golden.png'                 },
+    ];
+
+    const ABILITY_ICONS = [
+      { key:'jump', locked:'assets/Long_Jump_Locked.png', unlocked:'assets/Long_Jump.png' },
+      { key:'cap',  locked:'assets/Cappy_Locked.png',     unlocked:'assets/Cappy.png'     },
+      { key:'wall', locked:'assets/Wall_Jump_Locked.png', unlocked:'assets/Wall_Jump.png' },
+    ];
+
+    // Display names for the "Unlocked X" updater messages
+    const CAPTURE_NAMES = { parabones:'Parabones', banzai:'Banzai Bill', wire:'Spark Pylon', golden:'Gold Chain Chomp', bowser:'Bowser' };
+    const ABILITY_NAMES = { jump:'Long Jump', cap:'Cap Bounce', wall:'Wall Slide' };
+
+    let currentState = null;
+    let prevState = null;          // last state we diffed against (Moon Updater)
+    let updaterMessages = [];       // {html} oldest→newest; newest rendered at bottom
+
+    // ── Local tracker state (popup, non-server mode only) ──────────
+    function loadTrackerState() {
+      try {
+        const raw = localStorage.getItem(STATE_KEY);
+        return raw ? JSON.parse(raw) : null;
+      } catch (e) { return null; }
+    }
+
+    // Whether the Moon Kingdom row is drawn on the overlay
+    function moonOnObs(settings) {
+      return !!(settings && settings.show_kingdom_moon && settings.show_moon_obs !== false);
+    }
+
+    // Whether the Cap Kingdom row is drawn on the overlay
+    function capOnObs(settings) {
+      return !!(settings && settings.show_kingdom_cap && settings.show_cap_obs !== false);
+    }
+
+    // Whether a given kingdom's row should be drawn. Non-optional kingdoms (no
+    // settingKey) always show; optional ones need their main toggle on AND, if
+    // they have an OBS sub-toggle (obsKey), that sub-toggle on too.
+    function kingdomShownOnObs(k, settings) {
+      if (!k.settingKey) return true;
+      if (!settings || !settings[k.settingKey]) return false;
+      return !k.obsKey || settings[k.obsKey] !== false;
+    }
+
+    // Custom moon-row order set by drag-to-reorder in the main tracker. Returns
+    // the display order as a list of KINGDOMS indices (unlisted ones appended).
+    function kingdomOrderList(settings) {
+      const saved = Array.isArray(settings && settings.kingdom_order) ? settings.kingdom_order : [];
+      const seen = new Set(), order = [];
+      saved.forEach(i => { if (Number.isInteger(i) && i >= 0 && i < KINGDOMS.length && !seen.has(i)) { seen.add(i); order.push(i); } });
+      DEFAULT_DISPLAY_ORDER.forEach(i => { if (!seen.has(i)) order.push(i); });
+      return order;
+    }
+
+    // ── Per-kingdom max scaling (mirrors app.js) ──────────────────
+    // Green-complete uses each kingdom's scaled max, which tracks the Total
+    // Moon Requirement N. Every kingdom scales by N/124 (Cap and Moon included);
+    // SCALE_DEFAULT stays 124 so each shows its base max at the default.
+    const SCALE_COUNT = KINGDOMS.length, SCALE_DEFAULT = 124, SCALE_RANGE = 5;
+    const SCALE_BASE = KINGDOMS.slice(0, SCALE_COUNT).map(k => k.max - SCALE_RANGE);
+    function computeScaledMax(N) {
+      N = N || SCALE_DEFAULT;
+      const raw = SCALE_BASE.map(c => c * N / SCALE_DEFAULT);
+      const normal = raw.map(Math.floor);
+      const rem = N - normal.reduce((a, b) => a + b, 0);
+      raw.map((v, i) => ({ i, frac: v - Math.floor(v) }))
+         .sort((a, b) => b.frac - a.frac)
+         .forEach((o, k) => { if (k < rem) normal[o.i]++; });
+      return normal.map(n => n + SCALE_RANGE);
+    }
+    let _obsMaxCache = { N: null, maxes: null };
+    function scaledMaxFor(i, settings) {
+      if (i >= SCALE_COUNT) return KINGDOMS[i].max;
+      const N = (settings && settings.moon_requirement) || SCALE_DEFAULT;
+      if (_obsMaxCache.N !== N) _obsMaxCache = { N, maxes: computeScaledMax(N) };
+      return _obsMaxCache.maxes[i];
+    }
+
+    // Unscaled overlay (tracker-body) width. Grows when the Moon Rock column is
+    // shown so the extra sign icon doesn't squeeze the right column off the fixed
+    // width and get clipped. Both the popup startup size and the Browser Source
+    // estimate use this. The updater can still widen the popup root past this when
+    // the window is dragged out (handled in applyScale).
+    function getObsBaseW(settings) {
+      const s = settings || {};
+      return OBS_BASE_W + (s.show_rock ? OBS_ROCK_COL_W : 0);
+    }
+
+    // Unscaled overlay height for the current settings (mirrors app.js)
+    function getObsBaseH(settings) {
+      const s = settings || {};
+      let h = OBS_BASE_H;
+      if (moonOnObs(s)) h += OBS_MOON_ROW_H;
+      if (capOnObs(s)) h += OBS_CAP_ROW_H;
+      if (s.show_moon_updater) {
+        const n = Math.min(5, Math.max(1, s.updater_count || 3));
+        h += n * OBS_UPDATER_MSG_H + OBS_UPDATER_PAD;
+      }
+      return h;
+    }
+
+    function currentBaseH() {
+      return getObsBaseH(currentState && currentState.settings ? currentState.settings : {});
+    }
+
+    // ── Apply scale + size to viewport ────────────────────────────
+    // Popup mode: the fixed-width tracker body (OBS_BASE_W) plus the full
+    // height are fitted to the window. When the updater is on, the overlay's
+    // root width is allowed to grow past OBS_BASE_W so the updater fills any
+    // extra horizontal space the user drags out, but never shrinks below
+    // OBS_BASE_W (dragging narrower just scales the whole overlay down).
+    // Browser Source mode: fixed scale from the URL/setting; width is the
+    // fixed tracker-body width (getObsBaseW), so long updater messages wrap.
+    function applyScale() {
+      const baseH = currentBaseH();
+      const settings = (currentState && currentState.settings) ? currentState.settings : {};
+      const updaterOn = !!settings.show_moon_updater;
+      const root = document.getElementById('obs-root');
+      const main = document.getElementById('obs-main');
+      const html = document.documentElement;
+      const body = document.body;
+
+      // Effective tracker-body width (grows for the Moon Rock column).
+      const bodyW = getObsBaseW(settings);
+
+      // While the popup is minimized the browser reports innerWidth/innerHeight
+      // as 0, which would compute scale(0) and blank the overlay (it "disappears"
+      // in OBS). Skip re-scaling in that case so the last good frame is kept.
+      if (isPopup && (window.innerWidth <= 0 || window.innerHeight <= 0)) return;
+
+      let scale, rootW;
+      if (isPopup) {
+        scale = Math.min(window.innerWidth / bodyW, window.innerHeight / baseH);
+        rootW = updaterOn
+          ? Math.max(bodyW, window.innerWidth / scale)
+          : bodyW;
+      } else {
+        const urlScale = parseFloat(params.get('scale'));
+        const settingsScale = settings.overlay_scale;
+        scale = urlScale || settingsScale || 1;
+        rootW = bodyW;
+      }
+
+      root.style.width = `${rootW}px`;
+      root.style.height = `${baseH}px`;
+      root.style.transform = `scale(${scale})`;
+      // The main body stays at bodyW even when the updater widens the root, so the
+      // moon list + right column always get their full width and never clip.
+      if (main) main.style.width = `${bodyW}px`;
+
+      if (isPopup) {
+        html.style.width = '100vw';
+        html.style.height = '100vh';
+        body.style.width = '100vw';
+        body.style.height = '100vh';
+      } else {
+        html.style.width = `${rootW * scale}px`;
+        html.style.height = `${baseH * scale}px`;
+        body.style.width = `${rootW * scale}px`;
+        body.style.height = `${baseH * scale}px`;
+      }
+    }
+
+    // ── Build DOM ─────────────────────────────────────────────────
+    function buildOBSLayout() {
+      // Moon rows (all kingdoms; optional Moon/Cap rows toggled in updateOBS)
+      const moonList = document.getElementById('obs-moon-list');
+      moonList.innerHTML = '';
+      KINGDOMS.forEach((k, i) => {
+        const row = document.createElement('div');
+        row.className = 'obs-moon-row';
+        row.dataset.i = i;
+
+        const lockImg   = document.createElement('img');
+        lockImg.className = 'obs-lock';
+        lockImg.src = 'assets/lock.png';
+        lockImg.alt = 'lock';
+
+        const peaceImg  = document.createElement('img');
+        peaceImg.className = 'obs-peace';
+        peaceImg.src = 'assets/peace.png';
+        peaceImg.alt = 'peace';
+
+        const rockImg   = document.createElement('img');
+        rockImg.className = 'obs-rock icon-off'; // hidden until show_rock is on
+        rockImg.src = 'assets/rock_locked.png';
+        rockImg.alt = 'rock';
+
+        const kingImg   = document.createElement('img');
+        kingImg.className = 'obs-kingdom';
+        kingImg.src = k.img;
+        kingImg.alt = k.name;
+
+        const countSpan = document.createElement('span');
+        countSpan.className = 'obs-count';
+        countSpan.textContent = '0 / ?';
+
+        row.appendChild(lockImg);
+        row.appendChild(peaceImg);
+        row.appendChild(rockImg);
+        row.appendChild(kingImg);
+        row.appendChild(countSpan);
+        moonList.appendChild(row);
+      });
+
+      // Capture icons (parabones, banzai, wire, bowser is separate)
+      const captureRow = document.getElementById('obs-capture-icons');
+      captureRow.innerHTML = '';
+      CAPTURE_ICONS.forEach(ic => {
+        const img = document.createElement('img');
+        img.dataset.key = ic.key;
+        img.src = ic.locked;
+        img.alt = ic.key;
+        captureRow.appendChild(img);
+      });
+
+      // Ability icons
+      const abilityRow = document.getElementById('obs-ability-icons');
+      abilityRow.innerHTML = '';
+      ABILITY_ICONS.forEach(ic => {
+        const img = document.createElement('img');
+        img.dataset.key = ic.key;
+        img.src = ic.locked;
+        img.alt = ic.key;
+        abilityRow.appendChild(img);
+      });
+    }
+
+    // ── Moon Updater ──────────────────────────────────────────────
+    function esc(s) { return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+    function pushMsg(html) {
+      updaterMessages.push(html);
+      if (updaterMessages.length > 30) updaterMessages = updaterMessages.slice(-30);
+    }
+
+    // Compare the previous state to the current one and queue messages for any
+    // moon add/subtract, multi moon (+3), newly-set moon requirement, capture,
+    // or ability. Subtracting a moon requirement produces no message.
+    function diffForUpdater(oldS, curS) {
+      // Moons
+      KINGDOMS.forEach((k, i) => {
+        const o = (oldS.moons && oldS.moons[i]) || {};
+        const c = (curS.moons && curS.moons[i]) || {};
+        const d = (c.count || 0) - (o.count || 0);
+        if (d === 3) {
+          pushMsg(`<span class="upd-num">+3</span><img class="upd-icon" src="${esc(k.multi)}"><span class="upd-text" style="color:${k.color}">${esc(k.short)} Multi Moon</span>`);
+        } else if (d > 0) {
+          pushMsg(`<span class="upd-num">+${d}</span><img class="upd-icon" src="${esc(k.img)}"><span class="upd-text" style="color:${k.color}">${esc(k.short)} Moon${d > 1 ? 's' : ''}</span>`);
+        } else if (d < 0) {
+          const n = -d;
+          pushMsg(`<span class="upd-num">\u2212${n}</span><img class="upd-icon" src="${esc(k.img)}"><span class="upd-text" style="color:${k.color}">${esc(k.short)} Moon${n > 1 ? 's' : ''}</span>`);
+        }
+
+        // Moon requirement ("?" -> number, or an increase). Never on decrease/clear.
+        const om = (o.max === null || o.max === undefined) ? null : o.max;
+        const cm = (c.max === null || c.max === undefined) ? null : c.max;
+        if (cm !== null && (om === null || cm > om)) {
+          pushMsg(`<img class="upd-icon" src="${esc(k.img)}"><span class="upd-text" style="color:${k.color}">${esc(k.short)} needs </span><span class="upd-num">${cm}</span><span class="upd-text" style="color:${k.color}"> Moon${cm === 1 ? '' : 's'}</span>`);
+        }
+      });
+
+      // Captures (false -> true only)
+      const oc = oldS.captures || {}, cc = curS.captures || {};
+      Object.keys(cc).forEach(key => {
+        if (cc[key] && !oc[key]) {
+          pushMsg(`<span class="upd-unlock">Unlocked ${esc(CAPTURE_NAMES[key] || key)}</span>`);
+        }
+      });
+
+      // Abilities (false -> true only)
+      const oa = oldS.abilities || {}, ca = curS.abilities || {};
+      Object.keys(ca).forEach(key => {
+        if (ca[key] && !oa[key]) {
+          pushMsg(`<span class="upd-unlock">Unlocked ${esc(ABILITY_NAMES[key] || key)}</span>`);
+        }
+      });
+    }
+
+    function renderUpdater(settings) {
+      const el = document.getElementById('obs-updater');
+      if (!settings || !settings.show_moon_updater) {
+        el.style.display = 'none';
+        return;
+      }
+      const count = Math.min(5, Math.max(1, settings.updater_count || 3));
+
+      el.style.display = 'flex';
+      el.style.order = (settings.updater_location === 'bottom') ? '2' : '0';
+      el.style.height = `${count * OBS_UPDATER_MSG_H + OBS_UPDATER_PAD}px`;
+      el.classList.toggle('updater-popup', isPopup);
+
+      // Show only the most recent `count` messages, newest at the bottom.
+      const visible = updaterMessages.slice(-count);
+      el.innerHTML = '';
+      visible.forEach((html, idx) => {
+        const div = document.createElement('div');
+        div.className = 'upd-msg';
+        div.innerHTML = html;
+        // Fade older (higher up) messages; newest at full opacity.
+        div.style.opacity = (visible.length > 1)
+          ? (0.35 + 0.65 * (idx / (visible.length - 1))).toFixed(3)
+          : '1';
+        el.appendChild(div);
+      });
+    }
+
+    // ── Update all DOM elements from current state ────────────────
+    function updateOBS(s) {
+      const incoming = s || currentState;
+      if (!incoming) return;
+
+      const settings = incoming.settings || {};
+
+      // Moon Updater diff (only while enabled). prevState always advances so
+      // re-enabling the updater later doesn't dump a backlog of changes.
+      if (prevState && settings.show_moon_updater) {
+        diffForUpdater(prevState, incoming);
+      }
+      prevState = JSON.parse(JSON.stringify(incoming));
+
+      currentState = incoming;
+      applyScale();
+      renderUpdater(settings);
+
+      const orderList = kingdomOrderList(settings);
+
+      // Moon rows
+      KINGDOMS.forEach((k, i) => {
+        const row = document.querySelector(`.obs-moon-row[data-i="${i}"]`);
+        if (!row) return;
+
+        // Reflect the tracker's drag-to-reorder ordering
+        const pos = orderList.indexOf(i);
+        row.style.order = pos === -1 ? i : pos;
+
+        // Optional kingdom (Moon / Cap) row visibility
+        if (k.settingKey) row.classList.toggle('row-gone', !kingdomShownOnObs(k, settings));
+
+        const m = (incoming.moons && incoming.moons[i]) || {};
+
+        const lockEl = row.querySelector('.obs-lock');
+        const peaceEl = row.querySelector('.obs-peace');
+        const rockEl = row.querySelector('.obs-rock');
+        lockEl.src  = m.lock  ? 'assets/unlock.png'       : 'assets/lock.png';
+        peaceEl.src = m.peace ? 'assets/peace_unlock.png' : 'assets/peace.png';
+        rockEl.src  = m.rock  ? 'assets/rock_unlocked.png' : 'assets/rock_locked.png';
+        lockEl.classList.toggle('icon-off', settings.show_lock === false);
+        peaceEl.classList.toggle('icon-off', settings.show_peace === false);
+        // Moon Rock is off by default, so it stays hidden unless explicitly enabled.
+        rockEl.classList.toggle('icon-off', settings.show_rock !== true);
+
+        const kImg = row.querySelector('.obs-kingdom');
+        kImg.classList.toggle('icon-white', settings.show_icon_colors === false);
+
+        const maxDisplay = (m.max !== null && m.max !== undefined) ? m.max : '?';
+        row.querySelector('.obs-count').textContent = `${m.count || 0} / ${maxDisplay}`;
+
+        // Mirror the main tracker: a user-entered max is the requirement exactly
+        // (even 0, or higher than the game's normal max); otherwise fall back to
+        // the scaled kingdom max. Never mix the two.
+        const required = (m.max !== null && m.max !== undefined) ? m.max : scaledMaxFor(i, settings);
+        const isComplete = settings.show_complete_color && (m.count || 0) >= required;
+        row.querySelector('.obs-count').classList.toggle('count-complete', isComplete);
+      });
+
+      // Capture icons
+      CAPTURE_ICONS.forEach(ic => {
+        const img = document.querySelector(`#obs-capture-icons img[data-key="${ic.key}"]`);
+        if (img && incoming.captures) {
+          img.src = incoming.captures[ic.key] ? ic.unlocked : ic.locked;
+        }
+      });
+
+      // Ability icons (+ individual Jump / Cap Bounce visibility)
+      ABILITY_ICONS.forEach(ic => {
+        const img = document.querySelector(`#obs-ability-icons img[data-key="${ic.key}"]`);
+        if (!img) return;
+        if (incoming.abilities) {
+          img.src = incoming.abilities[ic.key] ? ic.unlocked : ic.locked;
+        }
+        if (ic.key === 'jump') img.classList.toggle('icon-off', settings.show_ability_jump !== true);
+        if (ic.key === 'cap')  img.classList.toggle('icon-off', settings.show_ability_cap  !== true);
+      });
+
+      // Bowser (from captures)
+      const bowserImg = document.getElementById('obs-bowser-img');
+      if (bowserImg && incoming.captures) {
+        bowserImg.src = incoming.captures.bowser
+          ? 'assets/Bowser_Capture.png'
+          : 'assets/Bowser_Capture_Locked.png';
+      }
+
+      // Total label
+      const totalEl = document.getElementById('obs-total');
+      const totalWrap = document.getElementById('obs-total-wrap');
+      const total = (incoming.moons || []).reduce((sum, m) => sum + (m.count || 0), 0);
+      const req   = settings.moon_requirement || 124;
+      totalEl.textContent = `${total} / ${req}`;
+      totalWrap.classList.toggle('hidden', settings.show_moon_total === false);
+
+      // Section visibility
+      document.getElementById('obs-capture-section')
+        .classList.toggle('hidden', settings.show_captures === false);
+      document.getElementById('obs-bowser')
+        .classList.toggle('hidden', settings.show_captures === false);
+      document.getElementById('obs-ability-section')
+        .classList.toggle('hidden', settings.show_ability_lock === false);
+    }
+
+    // ── Init ────────────────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', () => {
+      if (isPopup) {
+        document.documentElement.classList.add('popup-mode');
+        document.body.classList.add('popup-mode');
+        document.body.style.background = '#181818';
+        document.documentElement.style.background = '#181818';
+
+        window.addEventListener('resize', applyScale);
+
+        window.addEventListener('storage', (e) => {
+          if (e.key !== STATE_KEY || serverMode) return;
+          updateOBS(loadTrackerState());
+        });
+
+        // Storage events aren't reliably delivered to a minimized/background
+        // window, so also poll localStorage on an interval. Timers are throttled
+        // (~1s) while hidden but still fire, which lets the popup keep updating
+        // for OBS capture even when it isn't the focused window. We only re-render
+        // when the stored state actually changed, and never in server mode (the
+        // WebSocket already delivers updates in the background).
+        let lastPolledRaw = null;
+        try { lastPolledRaw = localStorage.getItem(STATE_KEY); } catch (e) {}
+        setInterval(() => {
+          if (serverMode) return;
+          let raw = null;
+          try { raw = localStorage.getItem(STATE_KEY); } catch (e) { return; }
+          if (raw === lastPolledRaw) return;
+          lastPolledRaw = raw;
+          updateOBS(raw ? JSON.parse(raw) : null);
+        }, 500);
+
+        document.addEventListener('visibilitychange', () => {
+          if (document.hidden) return;
+          if (serverMode) {
+            updateOBS(currentState);
+          } else {
+            updateOBS(loadTrackerState());
+          }
+        });
+
+        if (!room) updateOBS(loadTrackerState());
+      }
+
+      applyScale();
+      buildOBSLayout();
+
+      if (room && window.SMOSync) {
+        serverMode = true;
+        window.SMOSync.onState((remoteState) => {
+          updateOBS(remoteState);
+        });
+        window.SMOSync.connect(room, wsUrl);
+      } else if (isPopup) {
+        // Re-render now that the layout DOM exists
+        updateOBS(loadTrackerState());
+      }
+    });
+  </script>
+</body>
+</html>
