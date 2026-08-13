@@ -102,6 +102,16 @@
     const resolvedTgt = stageToNode.get(raw.to) || null;
     const effectiveSrc = resolvedSrc || this._lastKnownNode;
 
+    // Temporary diagnostic - remove once the kingdom-home-arrival mislink is
+    // actually confirmed fixed. Shows the raw stage names straight off the
+    // event alongside what they resolved to, so a bad resolution and a bad
+    // downstream draw (map.html's dedup, etc.) are distinguishable at a
+    // glance in the browser console.
+    console.log('[tracker] event', {
+      from: raw.from, to: raw.to, exitId: raw.exitId, debugArrivalDoorId: raw.debugArrivalDoorId,
+      resolvedSrc, resolvedTgt, effectiveSrc, lastKnownNodeBefore: this._lastKnownNode,
+    });
+
     if (resolvedSrc) this._lastKnownNode = resolvedSrc;
     if (!effectiveSrc || !resolvedTgt) return null;
     this._lastKnownNode = resolvedTgt;
