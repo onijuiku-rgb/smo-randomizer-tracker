@@ -38,6 +38,17 @@
         .then((r) => r.json())
         .then((dict) => {
           const map = new Map();
+          // Ambiguous stages (a handful, listed in _meta.ambiguous_stages -
+          // e.g. Sand Kingdom's shop building covers both the public shop
+          // counter and the employees-only back room, both the same
+          // loading_zone_name) must resolve to their documented first-listed
+          // candidate, seeded before the general zones loop below so its
+          // "if (!map.has(...))" skips them rather than letting whichever
+          // candidate happens to appear first in dict.zones win by accident.
+          const preferred = (dict._meta && dict._meta.ambiguous_stages) || {};
+          for (const [stageName, nodes] of Object.entries(preferred)) {
+            if (nodes && nodes.length) map.set(stageName, nodes[0]);
+          }
           for (const zone of dict.zones) {
             if (!map.has(zone.loading_zone_name)) map.set(zone.loading_zone_name, zone.map_node);
           }

@@ -6976,7 +6976,16 @@ init();
     // walking back is redundant information, not a new connection. Without this, simply
     // backtracking along a path you already recorded spawned a whole separate chain for
     // every step of the walk back.
-    const alreadyConnectedReverse = edgeList.some(e => e.src === data.tgt && e.tgt === data.src);
+    //
+    // Except arriving at a kingdom's own home node: that's a real position
+    // change worth reflecting even if the reverse edge (kingdom -> the
+    // subarea you're returning from) already exists from an earlier visit -
+    // otherwise, since there's no separate "current position" state (it's
+    // inferred purely from the edge graph), the graph kept showing the last
+    // subarea/ExStage visited as "current" instead of the kingdom itself.
+    const isKingdomArrival = data.tgt.startsWith('kingdom:');
+    const alreadyConnectedReverse = !isKingdomArrival
+      && edgeList.some(e => e.src === data.tgt && e.tgt === data.src);
     if (alreadyConnectedReverse) return;
     connect(data.src, data.sPart || PART_OUT, data.tgt, data.tPart || PART_IN);
   }

@@ -30,6 +30,15 @@ const ROOT = __dirname;
 const dictPath = path.join(ROOT, 'loading_zone_dictionary.json');
 const dict = JSON.parse(fs.readFileSync(dictPath, 'utf8'));
 const stageToNode = new Map();
+// Seed ambiguous stages with their documented first-listed candidate first -
+// the general zones loop below's "if (!has(...))" then skips them, instead
+// of whichever candidate happened to appear first in dict.zones winning by
+// accident (that used to silently contradict the log line right below).
+if (dict._meta && dict._meta.ambiguous_stages) {
+  for (const [stageName, nodes] of Object.entries(dict._meta.ambiguous_stages)) {
+    if (nodes && nodes.length) stageToNode.set(stageName, nodes[0]);
+  }
+}
 for (const zone of dict.zones) {
   if (!stageToNode.has(zone.loading_zone_name)) {
     stageToNode.set(zone.loading_zone_name, zone.map_node);
@@ -38,7 +47,7 @@ for (const zone of dict.zones) {
 console.log(`Loaded ${stageToNode.size} stage-name -> map_node mappings`);
 if (dict._meta && dict._meta.ambiguous_stages) {
   const ambiguous = Object.keys(dict._meta.ambiguous_stages);
-  console.log(`${ambiguous.length} ambiguous stage name(s) will resolve to their first listed candidate: ${ambiguous.join(', ')}`);
+  console.log(`${ambiguous.length} ambiguous stage name(s) resolved to their first listed candidate: ${ambiguous.join(', ')}`);
 }
 
 function resolveStage(stageName) {
