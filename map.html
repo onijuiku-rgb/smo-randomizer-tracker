@@ -1336,8 +1336,22 @@
     <button class="map-btn" id="btn-controls">Info & Controls</button>
     <button class="map-btn" id="btn-settings">Settings</button>
     <button class="map-btn active" id="btn-display">Hide Display</button>
+    <button class="map-btn" id="btn-live-tracking">Live Tracking</button>
     <div class="topbar-sep"></div>
     <button class="map-btn danger" id="btn-clear">Clear</button>
+  </div>
+
+  <!-- Live Tracking (Phase 2): connects to the same room-code relay used for OBS sync, but
+       receives resolved connection events from the Switch instead of tracker UI state, and
+       calls connect() directly. A real side-panel bar now (toggled like Info & Controls),
+       not a floating overlay - that kept landing on top of other topbar buttons. -->
+  <div id="live-tracking-panel" class="side-panel hidden">
+    <input id="live-tracking-room" type="text" placeholder="room code" style="width:110px;">
+    <button id="live-tracking-connect" class="map-btn">Connect</button>
+    <label style="margin-left:8px; opacity:0.8; font-size:0.9em;">
+      <input type="checkbox" id="live-tracking-cloud"> Cloud Sync (no local server)
+    </label>
+    <span id="live-tracking-status" style="margin-left:8px; opacity:0.8;">disconnected</span>
   </div>
 
   <!-- Controls panel -->
@@ -1738,6 +1752,8 @@
   </div>
 </div>
 
+<script src="sync.js"></script>
+<script src="firebase-live-sync.js"></script>
 <script>
 'use strict';
 
@@ -5878,6 +5894,13 @@ document.getElementById('btn-controls').addEventListener('click', (e) => {
   e.target.textContent = hidden ? 'Info & Controls' : 'Info & Controls ✕';
 });
 
+document.getElementById('btn-live-tracking').addEventListener('click', (e) => {
+  const panel = document.getElementById('live-tracking-panel');
+  const hidden = panel.classList.toggle('hidden');
+  e.target.classList.toggle('active', !hidden);
+  e.target.textContent = hidden ? 'Live Tracking' : 'Live Tracking ✕';
+});
+
 document.getElementById('btn-settings').addEventListener('click', () => {
   document.getElementById('settings-overlay').classList.add('visible');
 });
@@ -6928,6 +6951,86 @@ function init() {
 }
 
 init();
+
+// ─────────────────────────────────────────────────────────────────
+// Live Tracking (Phase 2) - receives already-resolved map_node connections
+// from the local bridge script (which does the stage-name lookup itself,
+// since it has direct filesystem access to loading_zone_dictionary.json)
+// and draws them the same way a manual drag-connect would.
+// ─────────────────────────────────────────────────────────────────
+(function initLiveTracking() {
+  const roomInput = document.getElementById('live-tracking-room');
+  const connectBtn = document.getElementById('live-tracking-connect');
+  const cloudCheckbox = document.getElementById('live-tracking-cloud');
+  const statusEl = document.getElementById('live-tracking-status');
+
+  // Two interchangeable backends, same onStatus/onLiveEvent/connect shape:
+  // SMOSync (sync.js) is the local relay (server.js/tracker-server.js on the
+  // same PC), SMOFirebaseSync (firebase-live-sync.js) talks to Firestore
+  // directly - no local relay process needed at all, once a Firebase project
+  // is configured. The checkbox picks which one this session uses; both stay
+  // wired to the same connect()-drawing logic below regardless of choice.
+  function handleLiveEvent(data) {
+    if (!data || !data.src || !data.tgt) return;
+    // Doors are two-way pairs by design in this randomizer - once src->tgt is known,
+    // walking back is redundant information, not a new connection. Without this, simply
+    // backtracking along a path you already recorded spawned a whole separate chain for
+    // every step of the walk back.
+    //
+    // Except arriving at a kingdom's own home node: that's a real position
+    // change worth reflecting even if the reverse edge (kingdom -> the
+    // subarea you're returning from) already exists from an earlier visit -
+    // otherwise, since there's no separate "current position" state (it's
+    // inferred purely from the edge graph), the graph kept showing the last
+    // subarea/ExStage visited as "current" instead of the kingdom itself.
+    const isKingdomArrival = data.tgt.startsWith('kingdom:');
+    const alreadyConnectedReverse = !isKingdomArrival
+      && edgeList.some(e => e.src === data.tgt && e.tgt === data.src);
+    // Temporary diagnostic - remove once the kingdom-home-arrival mislink is
+    // actually confirmed fixed. nodes[data.tgt]/nodes[data.src] missing would
+    // make connect() silently no-op via canConnect()'s first check, which
+    // this makes visible instead of indistinguishable from the dedup path.
+    console.log('[tracker] handleLiveEvent', {
+      src: data.src, tgt: data.tgt, isKingdomArrival, alreadyConnectedReverse,
+      srcNodeExists: !!nodes[data.src], tgtNodeExists: !!nodes[data.tgt],
+    });
+    if (alreadyConnectedReverse) return;
+    connect(data.src, data.sPart || PART_OUT, data.tgt, data.tPart || PART_IN);
+  }
+
+  if (window.SMOSync) {
+    window.SMOSync.onStatus((status) => {
+      if (!cloudCheckbox.checked) statusEl.textContent = status;
+    });
+    window.SMOSync.onLiveEvent(handleLiveEvent);
+  }
+
+  if (window.SMOFirebaseSync) {
+    window.SMOFirebaseSync.onStatus((status) => {
+      if (cloudCheckbox.checked) statusEl.textContent = status;
+    });
+    window.SMOFirebaseSync.onLiveEvent(handleLiveEvent);
+  }
+
+  if (!window.SMOSync && !window.SMOFirebaseSync) return; // both scripts failed to load - fail quiet, this panel is optional
+
+  connectBtn.addEventListener('click', () => {
+    const room = roomInput.value.trim();
+    if (!room) return;
+
+    if (cloudCheckbox.checked) {
+      if (window.SMOSync) window.SMOSync.disconnect();
+      if (window.SMOFirebaseSync) window.SMOFirebaseSync.connect(room);
+    } else {
+      if (window.SMOFirebaseSync) window.SMOFirebaseSync.disconnect();
+      if (window.SMOSync) {
+        // No custom relay URL field yet - same local server.js/tracker-server.js this page is served alongside.
+        const wsPort = window.location.port || (window.location.protocol === 'https:' ? '443' : '80');
+        window.SMOSync.connect(room, `ws://${window.location.hostname}:${wsPort}/ws`);
+      }
+    }
+  });
+})();
 </script>
 </body>
 </html>
