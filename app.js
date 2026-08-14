@@ -1455,7 +1455,7 @@ function applySidePanel() {
     title.textContent = 'Abilities & Captures';
     // Version tag so a browser can't keep serving an older cached copy of the
     // panel. Bump it here and in index.html's script tags together.
-    src = 'apc.html?v=2';
+    src = 'apc.html?v=3';
   }
 
   layoutRow.classList.toggle('location-horizontal', location === 'horizontal');
@@ -1917,7 +1917,7 @@ function openApc() {
     apcWindow.focus();
     return;
   }
-  apcWindow = window.open('apc.html?v=2', 'AbilitiesCaptures');
+  apcWindow = window.open('apc.html?v=3', 'AbilitiesCaptures');
 }
 
 function openLoadingZones() {
