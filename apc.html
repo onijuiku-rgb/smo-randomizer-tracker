@@ -188,8 +188,17 @@
     try {
       const raw = localStorage.getItem(STATE_KEY);
       state = raw ? JSON.parse(raw) : {};
-      console.log('[apc] readState', { captures: state.captures, apcCaptures: state.apc && state.apc.captures,
-        abilities: state.abilities, apcAbilities: state.apc && state.apc.abilities });
+      // Decoded to readable names, not raw objects - a screenshot with a
+      // collapsed object in it answers nothing. This is APC.isUnlocked()
+      // evaluated the exact same way render() itself will evaluate it a
+      // moment later, so if a name is missing here, render() was never
+      // going to show it unlocked either - the bug is upstream of render(),
+      // in what this panel actually has in `state`. If it's present here
+      // but the grid still doesn't show it unlocked, the bug is in render().
+      console.log('[apc] readState captures unlocked:',
+        APC.CAPTURES.filter(c => APC.isUnlocked(state, 'captures', c.key)).map(c => c.key));
+      console.log('[apc] readState abilities unlocked:',
+        APC.ABILITIES.filter(a => APC.isUnlocked(state, 'abilities', a.key)).map(a => a.key));
     } catch (e) {
       console.error('APC: failed to read state', e);
       state = {};
