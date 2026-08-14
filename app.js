@@ -91,7 +91,17 @@ function applyProgressSnapshot(data) {
   if (!data) return;
   // Temporary diagnostic, pairs with firebase-progress-sync.js's own log -
   // that one shows what Firestore has, this one shows what actually got
-  // decoded/applied into tracker state from it.
+  // decoded/applied into tracker state from it. Decoded to readable names
+  // rather than raw bit strings - a 52-character string is nearly
+  // impossible to verify correctly by eye off a screenshot.
+  if (typeof data.captures === 'string') {
+    console.log('[tracker-progress] captures unlocked:',
+      CAPTURE_ORDER.filter((key, i) => data.captures[i] === '1'));
+  }
+  if (typeof data.abilities === 'string') {
+    console.log('[tracker-progress] abilities unlocked:',
+      ABILITY_ORDER.filter((key, i) => data.abilities[i] === '1'));
+  }
   console.log('[tracker-progress] applying', data);
   if (typeof data.moons === 'string') {
     const counts = data.moons.split(',').map(Number);
