@@ -95,6 +95,16 @@ function applyProgressSnapshot(data) {
       if (!isNaN(counts[i])) state.moons[i].count = counts[i];
     }
   }
+  if (typeof data.moonReqs === 'string') {
+    // -1 means "not visited yet" (the mod withholds the real value until
+    // then, same spoiler-prevention rule the in-game HUD overlay uses) -
+    // leave whatever's already there (a manual entry, or still "?") alone
+    // rather than overwriting it with a value the player hasn't earned.
+    const reqs = data.moonReqs.split(',').map(Number);
+    for (let i = 0; i < reqs.length && i < state.moons.length; i++) {
+      if (!isNaN(reqs[i]) && reqs[i] >= 0) state.moons[i].max = reqs[i];
+    }
+  }
   if (window.APC && typeof data.captures === 'string') {
     for (let i = 0; i < CAPTURE_ORDER.length && i < data.captures.length; i++) {
       APC.setUnlocked(state, 'captures', CAPTURE_ORDER[i], data.captures[i] === '1');
