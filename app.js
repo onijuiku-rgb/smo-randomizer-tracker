@@ -145,7 +145,23 @@ function applyProgressSnapshot(data) {
     }
   }
   refreshAll();
+  // adoptPanelOwnedState() (called from inside saveState()) normally pulls
+  // state.apc.captures/abilities back from whatever's currently in
+  // localStorage before every save, so this window's saveState() calls for
+  // unrelated reasons (a moon count changing, say) can't stomp an edit the
+  // Abilities & Captures panel just made that hasn't round-tripped back into
+  // this window's own `state` yet. It has no way to tell that apart from
+  // "this window's in-memory state is actually the newer one" - which is
+  // exactly the case here, straight off a live snapshot from the mod - so
+  // without this, every capture/ability just set above gets silently
+  // reverted to its previous value right before the write that was supposed
+  // to persist it (confirmed via the panel's own diagnostics: applied here,
+  // but never landed in localStorage). authoritativeWrite is the existing
+  // escape hatch for "this write should win" - see resetAll() for the same
+  // pattern.
+  authoritativeWrite = true;
   saveState();
+  authoritativeWrite = false;
 }
 
 const CAPTURE_ICONS = [
