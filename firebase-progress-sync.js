@@ -62,10 +62,20 @@
         stateDoc,
         (snapshot) => {
           this._setStatus('connected');
-          if (!snapshot.exists()) return;
+          if (!snapshot.exists()) {
+            console.log('[tracker-progress] snapshot does not exist yet');
+            return;
+          }
           const data = snapshot.data();
+          // Temporary diagnostic - shows exactly what Firestore actually
+          // has for this room, straight from the doc, so a stuck tracker
+          // and a stuck upload (mod-side) are distinguishable at a glance.
+          console.log('[tracker-progress] snapshot', data);
           if (!data || typeof data.moons !== 'string' || typeof data.captures !== 'string'
-            || typeof data.abilities !== 'string') return;
+            || typeof data.abilities !== 'string') {
+            console.log('[tracker-progress] snapshot missing required string fields, ignoring', data);
+            return;
+          }
           this.progressListeners.forEach((cb) => cb(data));
         },
         (err) => {

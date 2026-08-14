@@ -89,6 +89,10 @@ const ABILITY_ORDER = [
 // than throwing - the next snapshot corrects it.
 function applyProgressSnapshot(data) {
   if (!data) return;
+  // Temporary diagnostic, pairs with firebase-progress-sync.js's own log -
+  // that one shows what Firestore has, this one shows what actually got
+  // decoded/applied into tracker state from it.
+  console.log('[tracker-progress] applying', data);
   if (typeof data.moons === 'string') {
     const counts = data.moons.split(',').map(Number);
     for (let i = 0; i < counts.length && i < state.moons.length; i++) {
