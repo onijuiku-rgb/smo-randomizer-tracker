@@ -44,6 +44,71 @@ const DEFAULT_DISPLAY_ORDER = (() => {
   return capIdx === -1 ? rest : [capIdx, ...rest];
 })();
 
+// ── Live auto-tracking progress decode order ────────────────────────────
+// TrackerBridge.cpp (the mod) sends moons/captures/abilities as compact
+// positional strings, not keyed objects - decoding them means knowing the
+// exact order the mod encoded them in. Moons need no separate table here:
+// the mod's kProgressWorldIds order already matches KINGDOMS' own order
+// above (Cascade..Bowser, then Moon, then Cap) index-for-index.
+//
+// CAPTURE_ORDER mirrors CaptureRando.cpp's sCaptures[] table order exactly
+// (52 entries - the mod iterates getCapture(0..51) and appends one '1'/'0'
+// bit per index). ABILITY_ORDER mirrors AbilityRando.h's AbilityId enum
+// declaration order, skipping AbilityId_CapReturnJump (the one ability with
+// no entry on this tracker's Abilities panel - always granted, nothing to
+// track). If either table in the mod ever changes order, this array has to
+// be updated to match or the live decode silently mislabels captures.
+const CAPTURE_ORDER = [
+  'Frog_Capture', 'Spark_pylon_Capture', 'Paragoomba_Capture', 'Chain_Chomp_Capture',
+  'Big_Chain_Chomp_Capture', 'Gold_Chain_Chomp_Capture', 'T-Rex_Capture', 'Binoculars_Capture',
+  'Bullet_Bill_Capture', 'Moe-Eye_Capture', 'Cactus_Capture', 'Goomba_Capture',
+  'Knucklotec_Fist_Capture', 'Rocket_Capture', 'Glydon_Capture', 'Lakitu_Capture',
+  'Zipper_Capture', 'Cheep_Cheep_Capture', 'Puzzle_Part_(Lake)_Capture', 'Poison_Piranha_Plant_Capture',
+  'Uproot_Capture', 'Fire_Bro_Capture', 'Sherm_Capture', 'Coin_Coffer_Capture',
+  'Tree_Capture', 'Rock_Capture', 'Picture_Match_Part_(Goomba)_Capture', 'Tropical_Wiggler_Capture',
+  'Pole_Capture', 'Manhole_Capture', 'Taxi_Capture', 'RC_Car_Capture',
+  'Ty-foo_Capture', 'Shiverian_Racer_Capture', 'Cheep_Cheep_(Snow)_Capture', 'Gushen_Capture',
+  'Lava_Bubble_Capture', 'Volbonan_Capture', 'Hammer_Bro_Capture', 'Meat_Capture',
+  'Fire_Piranha_Plant_Capture', 'Pokio_Capture', 'Jizo_Capture', 'Bowser_Statue_Capture',
+  'Parabones_Capture', 'Banzai_Bill_Capture', 'Chargin_Chuck_Capture', 'Bowser_Capture',
+  'Letter_Capture', 'Puzzle_Part_(Metro)_Capture', 'Picture_Match_Part_(Mario)_Capture', 'Yoshi_Capture',
+];
+
+const ABILITY_ORDER = [
+  'Jump', 'Double_Jump', 'Triple_Jump', 'Backflip', 'Long_Jump', 'Vault', 'Side_Flip',
+  'Ground_Pound_Jump', 'Roll', 'Roll_Boost', 'Crouch', 'Ground_Pound', 'Dive', 'Spin',
+  'Wall_Jump', 'Ledge_Grab', 'Climb', 'Swing', 'Neutral_Throw', 'Up_Throw', 'Down_Throw',
+  'Spin_Throw',
+];
+
+// Applies a live progress snapshot from the mod (see firebase-progress-sync.js)
+// straight into tracker state, the same way a manual click would, then
+// refreshes every affected UI surface and persists/broadcasts like any other
+// change. A malformed or truncated string (partial write mid-transmission,
+// unexpected length) just clamps to whatever prefix decodes cleanly rather
+// than throwing - the next snapshot corrects it.
+function applyProgressSnapshot(data) {
+  if (!data) return;
+  if (typeof data.moons === 'string') {
+    const counts = data.moons.split(',').map(Number);
+    for (let i = 0; i < counts.length && i < state.moons.length; i++) {
+      if (!isNaN(counts[i])) state.moons[i].count = counts[i];
+    }
+  }
+  if (window.APC && typeof data.captures === 'string') {
+    for (let i = 0; i < CAPTURE_ORDER.length && i < data.captures.length; i++) {
+      APC.setUnlocked(state, 'captures', CAPTURE_ORDER[i], data.captures[i] === '1');
+    }
+  }
+  if (window.APC && typeof data.abilities === 'string') {
+    for (let i = 0; i < ABILITY_ORDER.length && i < data.abilities.length; i++) {
+      APC.setUnlocked(state, 'abilities', ABILITY_ORDER[i], data.abilities[i] === '1');
+    }
+  }
+  refreshAll();
+  saveState();
+}
+
 const CAPTURE_ICONS = [
   { key: 'parabones', locked: 'assets/Parabones_Capture_Locked.png', unlocked: 'assets/Parabones_Capture.png' },
   { key: 'banzai', locked: 'assets/Banzai_Bill_Capture_Locked.png', unlocked: 'assets/Banzai_Bill_Capture.png' },
@@ -1673,10 +1738,18 @@ function connectRoom() {
   if (window.SMOSync) {
     window.SMOSync.connect(room, wsUrl);
   }
+  // Same room code the player enters on the Switch's Tracker Live Testing
+  // menu - this is what actually receives the mod's live moon/capture/
+  // ability updates. Independent of whether the SMOSync connect above
+  // succeeds (that's just for syncing this state between viewer windows/OBS).
+  if (window.SMOFirebaseProgressSync) {
+    window.SMOFirebaseProgressSync.connect(room);
+  }
 }
 
 function disconnectRoom() {
   if (window.SMOSync) window.SMOSync.disconnect();
+  if (window.SMOFirebaseProgressSync) window.SMOFirebaseProgressSync.disconnect();
   try {
     localStorage.removeItem(ROOM_CODE_KEY);
   } catch (e) { }
@@ -1738,6 +1811,14 @@ function setupSyncUI() {
   window.SMOSync.onState((remoteState) => {
     applyRemoteState(remoteState);
   });
+
+  // Live moon/capture/ability updates straight from the mod (see
+  // connectRoom()/disconnectRoom() for where this actually connects).
+  if (window.SMOFirebaseProgressSync) {
+    window.SMOFirebaseProgressSync.onProgress((data) => {
+      applyProgressSnapshot(data);
+    });
+  }
 
   // Button wiring
   const connectBtn = document.getElementById('btn-connect-room');
