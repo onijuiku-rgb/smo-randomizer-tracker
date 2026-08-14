@@ -105,6 +105,21 @@ function applyProgressSnapshot(data) {
       if (!isNaN(reqs[i]) && reqs[i] >= 0) state.moons[i].max = reqs[i];
     }
   }
+  if (typeof data.kingdomStatus === 'string') {
+    // One digit per kingdom, bits 4/2/1 = unlocked/peace/moon-rock (see
+    // TrackerBridge.cpp's checkAndSendProgress()). state.moons[i].lock is
+    // named for the toggle button, not its boolean sense - true there means
+    // *unlocked* (see toggleLock()), matching bit 4 directly with no
+    // inversion needed.
+    const statuses = data.kingdomStatus.split(',').map(Number);
+    for (let i = 0; i < statuses.length && i < state.moons.length; i++) {
+      const s = statuses[i];
+      if (isNaN(s)) continue;
+      state.moons[i].lock = (s & 4) !== 0;
+      state.moons[i].peace = (s & 2) !== 0;
+      state.moons[i].rock = (s & 1) !== 0;
+    }
+  }
   if (window.APC && typeof data.captures === 'string') {
     for (let i = 0; i < CAPTURE_ORDER.length && i < data.captures.length; i++) {
       APC.setUnlocked(state, 'captures', CAPTURE_ORDER[i], data.captures[i] === '1');
